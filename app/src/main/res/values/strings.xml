@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">PetruninKotlinYandex</string>
+    <string name="page_title">Мои дела</string>
+    <string name="counter_completed_tasks">Выполнено - </string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
