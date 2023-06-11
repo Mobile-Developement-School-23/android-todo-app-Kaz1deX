@@ -1,4 +1,5 @@
 package com.example.petruninkotlinyandex.data
 
-class TodoItem {
-}
+data class TodoItem(
+    val checkBoxTaskText: String
+)

@@ -6,15 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".fragments.MainScreenFragment">
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginEnd="20dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="No image"
+        android:src="@drawable/visibility"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_tasks"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/tasks"
+        android:id="@+id/recycler_tasks"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="16dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.169"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/counter_complete_tasks" />
+        app:layout_constraintTop_toBottomOf="@id/counter_complete_tasks"
+        tools:listitem="@layout/item_list"/>
 
     <TextView
         android:id="@+id/counter_complete_tasks"
@@ -28,6 +41,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="@+id/page_title"
         app:layout_constraintTop_toBottomOf="@+id/page_title"
+        android:textColor="#4D000000"
         tools:text="@string/counter_completed_tasks" />
 
     <TextView
@@ -41,22 +55,23 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0"
         tools:text="@string/page_title" />
 
-    <com.google.android.material.button.MaterialButton
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:fontFamily="@font/roboto"
-        android:text="+"
-        android:textAllCaps="false"
-        android:textSize="30dp"
-        app:backgroundTint="#007AFF"
-        app:cornerRadius="100dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="30dp"
+        android:clickable="true"
+        android:contentDescription="No fab"
+        android:src="@android:drawable/ic_input_add"
+        app:backgroundTint="@color/blue_theme"
+        app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
