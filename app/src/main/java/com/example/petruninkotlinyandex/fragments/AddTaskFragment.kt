@@ -39,9 +39,10 @@ class AddTaskFragment : Fragment() {
         val positionTask = arguments?.getInt("currentModel") ?: -1
         if (positionTask != -1) taskViewModel.setCurrentTask(taskViewModel.getTaskById(positionTask))
 
-        binding.cancelButton.setOnClickListener {
+        binding.toolbarButtonClose.setOnClickListener {
 //            requireActivity().supportFragmentManager.popBackStack()
-            Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
+//            Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
+            view?.findNavController()?.navigateUp()
         }
 
         binding.importanceButton.setOnClickListener {
@@ -64,22 +65,20 @@ class AddTaskFragment : Fragment() {
         }
     }
     private fun saveChangesTask(view: View) {
-        binding.saveText.setOnClickListener {
+        binding.toolbarButtonSave.setOnClickListener {
             if (binding.newTextTask.text.isNotEmpty()) {
                 var importance = binding.textImportance.text.toString()
-                //Toast.makeText(requireActivity(), "Importance: $importance", Toast.LENGTH_SHORT).show()
                 if(importance == "!!Высокий") importance = importance.drop(2)
                 if(taskViewModel.getCurrentTask() == null){
                     taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance))
-                    val test = taskViewModel.getTaskById(6).checkBoxTaskText
-                    Toast.makeText(requireActivity(), "$test", Toast.LENGTH_SHORT).show()
                 }
                 else{
                     taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
                     taskViewModel.getCurrentTask()?.importance = importance
                 }
 //            requireActivity().supportFragmentManager.popBackStack();
-                Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
+//                Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
+                view?.findNavController()?.navigateUp()
             }
             else {
                 binding.newTextTask.hint = "Необходимо ввести задачу"

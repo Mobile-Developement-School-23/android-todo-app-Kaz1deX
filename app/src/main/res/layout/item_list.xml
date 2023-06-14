@@ -37,9 +37,10 @@
                 android:maxLines="3"
                 android:paddingStart="5dp"
                 android:text="Text"
-                app:useMaterialThemeColors="false"
                 android:textColor="#000000"
-                android:textSize="16sp" />
+                android:textColorHint="@android:color/white"
+                android:textSize="16sp"
+                app:useMaterialThemeColors="false" />
 
             <ImageView
                 android:id="@+id/info_task"

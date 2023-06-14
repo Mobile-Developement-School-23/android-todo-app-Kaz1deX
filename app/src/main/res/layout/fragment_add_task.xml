@@ -7,119 +7,126 @@
     android:background="@color/main_theme"
     tools:context=".fragments.AddTaskFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool_buttons"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        app:cardCornerRadius="10dp"
-        app:layout_constraintEnd_toEndOf="@+id/save_text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cancel_button">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_text"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <EditText
-                android:id="@+id/new_text_task"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:backgroundTint="#FFFFFF"
-                android:gravity="start"
-                android:hint="Что надо сделать..."
-                android:minLines="5"
-                android:paddingStart="15dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/constraint_text"
-                app:layout_constraintTop_toTopOf="@+id/constraint_text" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-    </androidx.cardview.widget.CardView>
-
-    <ImageView
-        android:id="@+id/cancel_button"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/close"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/save_text"
-        style="@style/item_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="20dp"
-        android:text="@string/save_task"
-        android:textColor="@color/blue_theme"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/cancel_button"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/cancel_button"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <Spinner
-        android:id="@+id/importance_spinner"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="30dp"
-        android:background="#0000"
-        android:contentDescription="No spinner"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/cardView"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/toolbar_button_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:src="@drawable/close"
+            android:tint="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/delete_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:drawableStart="@drawable/delete"
-        android:drawablePadding="10dp"
-        android:text="Удалить"
-        android:textColor="#FD0000"
-        app:layout_constraintEnd_toEndOf="@+id/importance_button"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/importance_button"
-        app:layout_constraintTop_toBottomOf="@+id/importance_button" />
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/toolbar_button_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginRight="15dp"
+            android:text="СОХРАНИТЬ"
+            android:textColor="@color/blue_theme"
+            android:textSize="16sp"
+            android:tint="@color/black"
+            app:fontFamily="@font/roboto_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/importance_button"
-        style="@style/item_title"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_marginTop="50dp"
-        android:background="#00000000"
-        android:fontFamily="@font/roboto"
-        android:gravity="bottom"
-        android:padding="0dp"
-        android:text="Важность"
-        android:textAllCaps="false"
-        android:textColor="@color/black"
-        app:layout_constraintStart_toStartOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/cardView" />
 
-    <TextView
-        android:id="@+id/text_importance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/roboto"
-        android:text="Нет"
-        app:layout_constraintEnd_toEndOf="@+id/importance_button"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/importance_button"
-        app:layout_constraintTop_toBottomOf="@+id/importance_button" />
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tool_buttons">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginLeft="15dp"
+                android:layout_marginRight="15dp"
+                app:cardCornerRadius="10dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/constraint_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <EditText
+                        android:id="@+id/new_text_task"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:backgroundTint="#FFFFFF"
+                        android:gravity="start"
+                        android:hint="Что надо сделать..."
+                        android:minLines="5"
+                        android:paddingStart="15dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/importance_button"
+                style="@style/item_title"
+                android:layout_width="wrap_content"
+                android:layout_height="48dp"
+                android:layout_marginLeft="15dp"
+                android:background="#00000000"
+                android:fontFamily="@font/roboto"
+                android:gravity="bottom"
+                android:padding="0dp"
+                android:text="Важность"
+                android:textAllCaps="false"
+                android:textColor="@color/black" />
+
+            <TextView
+                android:id="@+id/text_importance"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:fontFamily="@font/roboto"
+                android:text="Нет" />
+
+            <TextView
+                android:id="@+id/delete_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="50dp"
+                android:drawableStart="@drawable/delete"
+                android:drawablePadding="10dp"
+                android:text="Удалить"
+                android:textColor="#FD0000" />
+
+        </LinearLayout>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
