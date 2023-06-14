@@ -1,35 +1,47 @@
 package com.example.petruninkotlinyandex.repositories
 
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.lifecycle.MutableLiveData
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TodoItem
 
 class TodoItemsRepository {
-    private val listTasks = mutableListOf(
-        TodoItem("1", "Купить что-то", TodoItem.Importance.NORMAL, false, "11-06-2023"),
-        TodoItem("2", "Погулять на улице", TodoItem.Importance.LOW, false, "10-06-2023"),
-        TodoItem("3", "Написать доклад", TodoItem.Importance.HIGH, false, "09-06-2023"),
-        TodoItem("4", "Записаться на встречу с очень важным человеком, главное не забыть, а то  будет очень плохо, прям ооочень",
-            TodoItem.Importance.NORMAL, false, "11-06-2023"),
-        TodoItem("5", "Убраться в кавартире", TodoItem.Importance.NORMAL, false, "11-06-2023"),
-        TodoItem("6", "Убраться в кавартире", TodoItem.Importance.NORMAL, false, "11-06-2023"),
-        TodoItem("7", "Убраться в кавартире", TodoItem.Importance.NORMAL, false, "11-06-2023"),
-        TodoItem("8", "Убраться в кавартире", TodoItem.Importance.NORMAL, false, "11-06-2023"))
-
-    fun getTasks(context: Context): List<TodoItem> {
-        return listTasks
-
-//        return buildList {
-//            val checkBoxTaskText = "Hello, Maxim"
-//
-//            val numberOfTasks = (1..10).random()
-//            for(i in 0..10)
-//                add(TodoItem(checkBoxTaskText))
-//        }
+    private val listTasks: MutableLiveData<List<TodoItem>> = MutableLiveData<List<TodoItem>>()
+    private var currentIdTasks: String = "0"
+    init {
+        listTasks.value = ArrayList()
+        addTaskToRepository(TodoItem("Купить что-то", "Низкий"))
+        addTaskToRepository(TodoItem("Погулять на улице", "Нет"))
+        addTaskToRepository(TodoItem("Написать доклад", "Высокий"))
+        addTaskToRepository(TodoItem("Записаться на встречу с очень важным человеком, " +
+                "главное не забыть, а то  будет очень плохо, прям ооочень", "Высокий"))
+        addTaskToRepository(TodoItem("Убраться в квартире1", "Низкий"))
+        addTaskToRepository(TodoItem("Убраться в кавартире2", "Нет"))
+        addTaskToRepository(TodoItem("Убраться в квартире3", "Низкий"))
+        addTaskToRepository(TodoItem("Убраться в квартире4", "Низкий"))
+        addTaskToRepository(TodoItem("Убраться в квартире5", "Нет"))
+        addTaskToRepository(TodoItem("Убраться в квартире6", "Низкий"))
     }
+    fun getTasks(): MutableLiveData<List<TodoItem>> {
+        return listTasks
+    }
+    fun addTaskToRepository(todoItem: TodoItem) {
+        todoItem.idTask = currentIdTasks
+        currentIdTasks = (currentIdTasks.toInt() + 1).toString()
+//        val currentList: MutableList<TodoItem> = listTasks.value?.toMutableList() ?: mutableListOf()
+//        currentList.add(todoItem)
+//        listTasks.postValue(currentList)
 
-    fun addTask(todoItem: TodoItem) {
-        listTasks.add(0, todoItem)
+        listTasks.value = listTasks.value?.plus(todoItem)
+    }
+    fun deleteTaskFromRepository(position: Int) {
+//        listTasks.removeAt(position)
+    }
+    fun getTaskById(position: Int): TodoItem {
+        val currentList: MutableList<TodoItem> = listTasks.value?.toMutableList() ?: mutableListOf()
+        return currentList[position]
     }
 }

@@ -10,4 +10,8 @@
     <color name="textColor">#000000</color>
     <color name="blue_theme">#007AFF</color>
     <color name="main_theme">#F7F6F2</color>
+    <color name="red_high_importance">#FF1100</color>
+    <color name="gray_text">#4D000000</color>
+    <color name="gray_checkbox">#33FFFFFF</color>
+    <color name="green_check_box">#4CAF50</color>
 </resources>

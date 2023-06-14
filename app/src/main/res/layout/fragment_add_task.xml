@@ -9,30 +9,36 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="30dp"
-        app:cardCornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="@+id/save_button"
+        android:layout_marginEnd="20dp"
+        android:minHeight="150dp"
+        app:cardCornerRadius="10dp"
+        app:layout_constraintEnd_toEndOf="@+id/save_text"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cancel_button">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_text"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <EditText
                 android:id="@+id/new_text_task"
                 android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:ems="10"
-                android:hint="Что-то надо сделать"
-                android:inputType="textPersonName"
+                android:layout_height="match_parent"
+                android:backgroundTint="#FFFFFF"
+                android:gravity="start"
+                android:hint="Что надо сделать..."
+
+                android:paddingStart="15dp"
+                android:text="@string/long_text"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toStartOf="@+id/constraint_text"
+                app:layout_constraintTop_toTopOf="@+id/constraint_text" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.cardview.widget.CardView>
@@ -48,7 +54,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/save_button"
+        android:id="@+id/save_text"
         style="@style/item_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -70,10 +76,50 @@
         android:layout_width="0dp"
         android:layout_height="48dp"
         android:layout_marginTop="30dp"
-        android:contentDescription="No spinner"
         android:background="#0000"
+        android:contentDescription="No spinner"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/cardView"
         app:layout_constraintStart_toStartOf="@+id/cardView"
         app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/delete_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:drawableStart="@drawable/delete"
+        android:drawablePadding="20dp"
+        android:text="Удалить"
+        android:textColor="#FD0000"
+        app:layout_constraintEnd_toEndOf="@+id/importance_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/importance_button"
+        app:layout_constraintTop_toBottomOf="@+id/importance_button" />
+
+    <Button
+        android:id="@+id/importance_button"
+        style="@style/item_title"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="50dp"
+        android:background="#00000000"
+        android:gravity="bottom"
+        android:padding="0dp"
+        android:text="Важность"
+        android:textAllCaps="false"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="@+id/cardView"
+        app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+    <TextView
+        android:id="@+id/text_importance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Нет"
+        app:layout_constraintEnd_toEndOf="@+id/importance_button"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/importance_button"
+        app:layout_constraintTop_toBottomOf="@+id/importance_button" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,33 +7,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.TaskViewModel
+import com.example.petruninkotlinyandex.data.TaskViewModel
 import com.example.petruninkotlinyandex.adapters.TasksAdapter
-import com.example.petruninkotlinyandex.data.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
-import com.example.petruninkotlinyandex.repositories.TodoItemsRepository
 
 class MainScreenFragment : Fragment() {
-    private lateinit var binding: FragmentMainScreenBinding
+    private var _binding: FragmentMainScreenBinding? = null
     private lateinit var tasksRecyclerView: RecyclerView
     private val taskViewModel: TaskViewModel by activityViewModels()
-
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentMainScreenBinding.inflate(layoutInflater, container, false)
-
-//        val args = this.arguments
-//        val inputTask = arguments?.getString("newTask") ?: "None"
-//        todoItemsRepository.addTask(TodoItem("0", inputTask, TodoItem.Importance.NORMAL, false, "12-06-2023"))
+        _binding = FragmentMainScreenBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -43,15 +37,22 @@ class MainScreenFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
         tasksRecyclerView.adapter = tasksAdapter
-        tasksRecyclerView.layoutManager = layoutManager
+        tasksAdapter.tasksList = taskViewModel.getTasks().value ?: emptyList()
 
-//        tasksAdapter.tasksList = todoItemsRepository.getTasks(requireActivity())
-        tasksAdapter.tasksList = taskViewModel.getTasks(requireActivity())
-//        tasksAdapter.notifyDataSetChanged()
+        tasksRecyclerView.layoutManager = layoutManager
 
         binding.addButton.setColorFilter(Color.argb(255, 255, 255, 255));
         binding.addButton.setOnClickListener {
             Navigation.findNavController(view).navigate(R.id.action_mainScreenFragment_to_addTaskFragment)
         }
+
+        taskViewModel.getTasks().observe(viewLifecycleOwner, Observer { it?.let {
+            tasksRecyclerView.adapter?.notifyDataSetChanged()
+//            Toast.makeText(context, "UPDATING RECYCLER_VIEW ADAPTER", Toast.LENGTH_SHORT).show()
+        } })
+    }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

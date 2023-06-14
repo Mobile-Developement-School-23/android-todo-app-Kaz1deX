@@ -1,15 +1,6 @@
 package com.example.petruninkotlinyandex.data
 
-data class TodoItem(
-    val id_task: String,
-    val checkBoxTaskText: String,
-    val importance: Importance,
-    val isCompleted: Boolean,
-    val creationDate: String
-) {
-    enum class Importance {
-        LOW,
-        NORMAL,
-        HIGH
-    }
+data class TodoItem(var checkBoxTaskText: String, var importance: String, val creationDate: String = "None") {
+    var idTask: String = "0"
+    var isCompleted: Boolean = false
 }
