@@ -17,8 +17,8 @@ open class TaskViewModel: ViewModel() {
     fun addTaskToRepository(todoItem: TodoItem) {
         todoItemsRepository.addTaskToRepository(todoItem)
     }
-    fun deleteTaskFromRepository(position: Int) {
-        todoItemsRepository.deleteTaskFromRepository(position)
+    fun deleteTaskFromRepository(todoItem: TodoItem) {
+        todoItemsRepository.deleteTaskFromRepository(todoItem)
     }
     fun setCurrentTask(todoItem: TodoItem) {
         currentTask = todoItem

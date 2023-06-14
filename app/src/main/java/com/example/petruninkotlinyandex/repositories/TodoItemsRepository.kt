@@ -37,8 +37,8 @@ class TodoItemsRepository {
 
         listTasks.value = listTasks.value?.plus(todoItem)
     }
-    fun deleteTaskFromRepository(position: Int) {
-//        listTasks.removeAt(position)
+    fun deleteTaskFromRepository(todoItem: TodoItem) {
+        listTasks.value = listTasks.value?.minus(todoItem)
     }
     fun getTaskById(position: Int): TodoItem {
         val currentList: MutableList<TodoItem> = listTasks.value?.toMutableList() ?: mutableListOf()

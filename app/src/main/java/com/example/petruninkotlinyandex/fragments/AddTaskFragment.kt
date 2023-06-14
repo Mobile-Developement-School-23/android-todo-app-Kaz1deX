@@ -15,6 +15,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TaskViewModel
 import com.example.petruninkotlinyandex.data.TodoItem
@@ -50,29 +51,39 @@ class AddTaskFragment : Fragment() {
         saveChangesTask(view)
         pastTask()
 
-//        binding.deleteText.setOnClickListener {
-//            if (positionTask != -1) {
-//                taskViewModel.deleteTaskFromRepository(positionTask)
-//                Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
-//            }
-//        }
+        if (taskViewModel.getCurrentTask() == null) {
+            binding.deleteText.setTextColor(ContextCompat.getColor(binding.deleteText.context, R.color.gray_checkbox))
+            binding.deleteText.setCompoundDrawablesRelativeWithIntrinsicBounds(ContextCompat.getDrawable(
+                binding.deleteText.context, R.drawable.delete_gray), null, null, null)
+        }
+        else {
+            binding.deleteText.setOnClickListener {
+                taskViewModel.getCurrentTask()?.let { itt -> taskViewModel.deleteTaskFromRepository(itt) }
+                view?.findNavController()?.navigateUp()
+            }
+        }
     }
     private fun saveChangesTask(view: View) {
         binding.saveText.setOnClickListener {
-            var importance = binding.textImportance.text.toString()
-            //Toast.makeText(requireActivity(), "Importance: $importance", Toast.LENGTH_SHORT).show()
-            if(importance == "!!Высокий") importance = importance.drop(2)
-            if(taskViewModel.getCurrentTask() == null){
-                taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance))
-                val test = taskViewModel.getTaskById(6).checkBoxTaskText
-                Toast.makeText(requireActivity(), "$test", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
-                taskViewModel.getCurrentTask()?.importance = importance
-            }
+            if (binding.newTextTask.text.isNotEmpty()) {
+                var importance = binding.textImportance.text.toString()
+                //Toast.makeText(requireActivity(), "Importance: $importance", Toast.LENGTH_SHORT).show()
+                if(importance == "!!Высокий") importance = importance.drop(2)
+                if(taskViewModel.getCurrentTask() == null){
+                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance))
+                    val test = taskViewModel.getTaskById(6).checkBoxTaskText
+                    Toast.makeText(requireActivity(), "$test", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
+                    taskViewModel.getCurrentTask()?.importance = importance
+                }
 //            requireActivity().supportFragmentManager.popBackStack();
-            Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
+                Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
+            }
+            else {
+                binding.newTextTask.hint = "Необходимо ввести задачу"
+            }
         }
     }
     private fun pastTask() {
