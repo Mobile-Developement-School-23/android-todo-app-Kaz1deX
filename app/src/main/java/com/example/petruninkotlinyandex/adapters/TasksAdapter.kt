@@ -16,6 +16,7 @@ import com.example.petruninkotlinyandex.data.TodoItem
 
 class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
     lateinit var tasksList: MutableLiveData<List<TodoItem>>
+    private var onItemClickListener: OnItemClickListener? = null
 
     class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         //    private val binding = ItemListBinding.bind(itemView)
@@ -46,6 +47,7 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
             run {
                 updateTask(holder.checkBox, !todoItem.isCompleted, importanceHigh)
                 todoItem.isCompleted = !todoItem.isCompleted
+                onItemClickListener?.onItemClick(todoItem)
             }
         }
 
@@ -69,5 +71,12 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
             if (isHighImportance) compoundButton.setButtonDrawable(R.drawable.unchecked__red)
             else compoundButton.setButtonDrawable(R.drawable.unchecked_empty)
         }
+    }
+
+    fun setOnClickListener(onItemClickListener: OnItemClickListener) {
+        this.onItemClickListener = onItemClickListener
+    }
+    interface OnItemClickListener {
+        fun onItemClick(todoItem: TodoItem)
     }
 }

@@ -87,7 +87,7 @@
                 android:layout_gravity="bottom|left"
                 android:layout_marginLeft="33dp"
                 android:layout_marginBottom="10dp"
-                android:text="Выполнено - "
+                android:text="Выполнено - 0"
                 android:textSize="16sp"
                 app:layout_collapseMode="parallax" />
 

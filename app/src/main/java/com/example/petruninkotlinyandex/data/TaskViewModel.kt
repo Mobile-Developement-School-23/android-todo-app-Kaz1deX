@@ -13,6 +13,7 @@ open class TaskViewModel: ViewModel() {
     private var allTasks: MutableLiveData<List<TodoItem>> = todoItemsRepository.getAllTasks()
     private var currentTask: TodoItem? = null
     private var eyeIsVisibility: Boolean = true
+    private var counterCompleteTasks: Int = 0
     fun getTasks(): MutableLiveData<List<TodoItem>> {
         return tasks
     }
@@ -21,6 +22,9 @@ open class TaskViewModel: ViewModel() {
     }
     fun deleteTaskFromRepository(todoItem: TodoItem) {
         todoItemsRepository.deleteTaskFromRepository(todoItem)
+        if (todoItem.isCompleted) {
+            minusCounterCompleteTasks()
+        }
     }
     fun setCurrentTask(todoItem: TodoItem) {
         currentTask = todoItem
@@ -47,5 +51,17 @@ open class TaskViewModel: ViewModel() {
 
     fun setEyeVisibility(visibility: Boolean) {
         eyeIsVisibility = visibility
+    }
+
+    fun getCounterCompleteTasks(): Int {
+        return counterCompleteTasks
+    }
+
+    fun plusCounterCompleteTasks() {
+        counterCompleteTasks++
+    }
+
+    fun minusCounterCompleteTasks() {
+        counterCompleteTasks--
     }
 }

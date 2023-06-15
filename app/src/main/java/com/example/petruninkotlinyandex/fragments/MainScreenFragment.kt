@@ -39,6 +39,16 @@ class MainScreenFragment : Fragment() {
         val tasksAdapter = TasksAdapter()
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
+        binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+        tasksAdapter.setOnClickListener(object: TasksAdapter.OnItemClickListener {
+            override fun onItemClick(todoItem: TodoItem) {
+                if (!todoItem.isCompleted) taskViewModel.minusCounterCompleteTasks()
+                else taskViewModel.plusCounterCompleteTasks()
+                if (!taskViewModel.getEyeVisibility()) taskViewModel.hideCompleteTasks()
+                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+            }
+        })
+
         tasksRecyclerView.adapter = tasksAdapter
 //        tasksAdapter.tasksList = taskViewModel.getTasks().value ?: emptyList()
         tasksAdapter.tasksList = taskViewModel.getTasks()
@@ -75,6 +85,7 @@ class MainScreenFragment : Fragment() {
             }
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
