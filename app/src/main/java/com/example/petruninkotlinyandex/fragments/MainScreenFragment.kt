@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TaskViewModel
 import com.example.petruninkotlinyandex.adapters.TasksAdapter
+import com.example.petruninkotlinyandex.data.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
 
 class MainScreenFragment : Fragment() {
@@ -50,6 +51,12 @@ class MainScreenFragment : Fragment() {
             tasksRecyclerView.adapter?.notifyDataSetChanged()
 //            Toast.makeText(context, "UPDATING RECYCLER_VIEW ADAPTER", Toast.LENGTH_SHORT).show()
         } })
+
+        binding.swipeRefreshLayoutMainScreen.setOnRefreshListener {
+            taskViewModel.addTaskToRepository(TodoItem("My new Text", "Высокий"))
+            tasksAdapter.notifyDataSetChanged()
+            binding.swipeRefreshLayoutMainScreen.isRefreshing = false
+        }
     }
     override fun onDestroyView() {
         super.onDestroyView()
