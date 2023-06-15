@@ -6,6 +6,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
@@ -38,7 +40,8 @@ class MainScreenFragment : Fragment() {
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
         tasksRecyclerView.adapter = tasksAdapter
-        tasksAdapter.tasksList = taskViewModel.getTasks().value ?: emptyList()
+//        tasksAdapter.tasksList = taskViewModel.getTasks().value ?: emptyList()
+        tasksAdapter.tasksList = taskViewModel.getTasks()
 
         tasksRecyclerView.layoutManager = layoutManager
 
@@ -48,14 +51,28 @@ class MainScreenFragment : Fragment() {
         }
 
         taskViewModel.getTasks().observe(viewLifecycleOwner, Observer { it?.let {
-            tasksRecyclerView.adapter?.notifyDataSetChanged()
+            tasksAdapter?.notifyDataSetChanged()
 //            Toast.makeText(context, "UPDATING RECYCLER_VIEW ADAPTER", Toast.LENGTH_SHORT).show()
         } })
 
         binding.swipeRefreshLayoutMainScreen.setOnRefreshListener {
-            taskViewModel.addTaskToRepository(TodoItem("My new Text", "Высокий"))
-            tasksAdapter.notifyDataSetChanged()
             binding.swipeRefreshLayoutMainScreen.isRefreshing = false
+        }
+
+        if (taskViewModel.getEyeVisibility()) binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
+        else binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility_off))
+
+        binding.eyeButton.setOnClickListener {
+            if (taskViewModel.getEyeVisibility()) {
+                binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility_off))
+                taskViewModel.hideCompleteTasks()
+                taskViewModel.setEyeVisibility(false)
+            }
+            else {
+                binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
+                taskViewModel.showAllTasks()
+                taskViewModel.setEyeVisibility(true)
+            }
         }
     }
     override fun onDestroyView() {

@@ -1,41 +1,51 @@
 package com.example.petruninkotlinyandex.adapters
 
-import android.content.Context
 import android.graphics.Paint
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import android.widget.CompoundButton
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TodoItem
-import com.example.petruninkotlinyandex.viewHolder.TasksViewHolder
 
-class TasksAdapter: RecyclerView.Adapter<TasksViewHolder>() {
-    lateinit var tasksList: List<TodoItem>
+class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
+    lateinit var tasksList: MutableLiveData<List<TodoItem>>
+
+    class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
+        //    private val binding = ItemListBinding.bind(itemView)
+        var checkBox: CheckBox = itemView.findViewById(R.id.checkBox_task)
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TasksViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
         return TasksViewHolder(layoutInflater.inflate(R.layout.item_list, parent, false))
     }
 
-    override fun getItemCount() = tasksList.size
+    override fun getItemCount(): Int {
+        if(tasksList.value != null)
+            return tasksList.value!!.size
+        return 0
+    }
 
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
-        holder.onBind(tasksList[position])
-        val todoItem: TodoItem = tasksList[position]
-        holder.getCheckBox().text = todoItem.checkBoxTaskText
-        holder.getCheckBox().isChecked = todoItem.isCompleted
+        val todoItem: TodoItem = tasksList.value?.get(position) ?: return
+
+        holder.checkBox.text = todoItem.checkBoxTaskText
+        holder.checkBox.isChecked = todoItem.isCompleted
 
         val importanceHigh: Boolean = todoItem.importance == "Высокий"
-        updateTask(holder.getCheckBox(), todoItem.isCompleted, importanceHigh)
-        holder.getCheckBox().setOnCheckedChangeListener { compoundButton, isChecked ->
+        updateTask(holder.checkBox, todoItem.isCompleted, importanceHigh)
+
+        holder.checkBox.setOnClickListener {
             run {
-                updateTask(compoundButton, isChecked, importanceHigh)
-                todoItem.isCompleted = isChecked
+                updateTask(holder.checkBox, !todoItem.isCompleted, importanceHigh)
+                todoItem.isCompleted = !todoItem.isCompleted
             }
         }
 

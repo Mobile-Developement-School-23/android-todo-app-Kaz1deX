@@ -10,7 +10,9 @@ open class TaskViewModel: ViewModel() {
 //    val textTask: MutableLiveData<String> by lazy { MutableLiveData<String>() }
     private val todoItemsRepository = TodoItemsRepository()
     private var tasks: MutableLiveData<List<TodoItem>> = todoItemsRepository.getTasks()
+    private var allTasks: MutableLiveData<List<TodoItem>> = todoItemsRepository.getAllTasks()
     private var currentTask: TodoItem? = null
+    private var eyeIsVisibility: Boolean = true
     fun getTasks(): MutableLiveData<List<TodoItem>> {
         return tasks
     }
@@ -30,4 +32,20 @@ open class TaskViewModel: ViewModel() {
         return todoItemsRepository.getTaskById(position)
     }
     fun getCurrentTask() = currentTask
+
+    fun hideCompleteTasks() {
+        tasks.value = todoItemsRepository.getTasks().value?.filter { !it.isCompleted}
+    }
+
+    fun showAllTasks() {
+        tasks.value = todoItemsRepository.getAllTasks().value
+    }
+
+    fun getEyeVisibility(): Boolean {
+        return eyeIsVisibility
+    }
+
+    fun setEyeVisibility(visibility: Boolean) {
+        eyeIsVisibility = visibility
+    }
 }
