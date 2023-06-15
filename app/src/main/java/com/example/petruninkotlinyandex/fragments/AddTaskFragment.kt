@@ -1,5 +1,6 @@
 package com.example.petruninkotlinyandex.fragments
 
+import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -21,6 +22,7 @@ import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TaskViewModel
 import com.example.petruninkotlinyandex.data.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentAddTaskBinding
+import java.util.*
 
 class AddTaskFragment : Fragment() {
     private var _binding: FragmentAddTaskBinding? = null
@@ -64,6 +66,30 @@ class AddTaskFragment : Fragment() {
                 view?.findNavController()?.navigateUp()
             }
         }
+
+        val months = arrayOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
+        binding.switchDate.setOnClickListener {
+            if (binding.switchDate.isChecked) {
+                val datePickerDialog = DatePickerDialog(
+                    this@AddTaskFragment.requireContext(),
+                    DatePickerDialog.OnDateSetListener { _, year, monthOfYear, dayOfMonth ->
+                        val deadlineDate = "$dayOfMonth ${months[monthOfYear]} $year"
+                        binding.dateText.text = deadlineDate
+                    },
+                    Calendar.getInstance().get(Calendar.YEAR),
+                    Calendar.getInstance().get(Calendar.MONTH),
+                    Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+                )
+                datePickerDialog.show()
+                datePickerDialog.setOnCancelListener {
+                    binding.switchDate.isChecked = false
+                }
+            }
+            else {
+                binding.dateText.text = ""
+                taskViewModel.deleteData()
+            }
+        }
     }
     private fun saveChangesTask(view: View) {
         binding.toolbarButtonSave.setOnClickListener {
@@ -71,11 +97,12 @@ class AddTaskFragment : Fragment() {
                 var importance = binding.textImportance.text.toString()
                 if(importance == "!!Высокий") importance = importance.drop(2)
                 if(taskViewModel.getCurrentTask() == null){
-                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance))
+                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
                 }
                 else{
                     taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
                     taskViewModel.getCurrentTask()?.importance = importance
+                    taskViewModel.getCurrentTask()?.deadlineDate = binding.dateText.text.toString()
                 }
 //            requireActivity().supportFragmentManager.popBackStack();
 //                Navigation.findNavController(view).navigate(R.id.action_addTaskFragment_to_mainScreenFragment)
@@ -100,6 +127,11 @@ class AddTaskFragment : Fragment() {
             )
         }
         binding.textImportance.text = importanceTask
+        binding.dateText.text = todoItem.deadlineDate
+
+        if(todoItem.deadlineDate != ""){
+            binding.switchDate.isChecked = true
+        }
     }
     private fun showImportanceList(view: View) {
         val popupMenu = PopupMenu(context, view)
@@ -120,6 +152,7 @@ class AddTaskFragment : Fragment() {
         })
         popupMenu.show()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         taskViewModel.clearCurrentTask()

@@ -130,6 +130,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_importance" />
 
+            <Switch
+                android:id="@+id/switch_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginLeft="15dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginRight="5dp"
+                android:text="Сделать до"
+                android:textSize="16sp" />
+
             <TextView
                 android:id="@+id/data_main_text"
                 android:layout_width="wrap_content"
@@ -140,16 +151,16 @@
                 android:text="Сделать до"
                 android:textColor="@color/black"
                 android:textSize="16sp"
+                android:visibility="gone"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <TextView
-                android:id="@+id/data_text"
+                android:id="@+id/date_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/roboto"
-                android:text="15 июня 2023"
                 android:textColor="@color/blue_theme"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/data_main_text" />
@@ -163,7 +174,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/data_text" />
+                app:layout_constraintTop_toBottomOf="@+id/date_text" />
 
             <TextView
                 android:id="@+id/delete_text"

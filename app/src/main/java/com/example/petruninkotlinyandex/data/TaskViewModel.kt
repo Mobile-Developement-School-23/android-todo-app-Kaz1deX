@@ -10,7 +10,6 @@ open class TaskViewModel: ViewModel() {
 //    val textTask: MutableLiveData<String> by lazy { MutableLiveData<String>() }
     private val todoItemsRepository = TodoItemsRepository()
     private var tasks: MutableLiveData<List<TodoItem>> = todoItemsRepository.getTasks()
-    private var allTasks: MutableLiveData<List<TodoItem>> = todoItemsRepository.getAllTasks()
     private var currentTask: TodoItem? = null
     private var eyeIsVisibility: Boolean = true
     private var counterCompleteTasks: Int = 0
@@ -63,5 +62,9 @@ open class TaskViewModel: ViewModel() {
 
     fun minusCounterCompleteTasks() {
         counterCompleteTasks--
+    }
+
+    fun deleteData() {
+        currentTask?.deadlineDate = ""
     }
 }
