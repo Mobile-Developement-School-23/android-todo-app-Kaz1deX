@@ -1,12 +1,16 @@
 package com.example.petruninkotlinyandex.repositories
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.lifecycle.MutableLiveData
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TodoItem
+import java.util.*
+import kotlin.collections.ArrayList
 
 class TodoItemsRepository {
     private val listTasks: MutableLiveData<List<TodoItem>> = MutableLiveData<List<TodoItem>>()
@@ -33,13 +37,12 @@ class TodoItemsRepository {
         return allTasks
     }
     fun addTaskToRepository(todoItem: TodoItem) {
+        val dateFormat = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+        val dateString = dateFormat.format(Calendar.getInstance().time)
+        todoItem.currentDate = dateString
+
         todoItem.idTask = currentIdTasks
         currentIdTasks = (currentIdTasks.toInt() + 1).toString()
-//        val currentList: MutableList<TodoItem> = listTasks.value?.toMutableList() ?: mutableListOf()
-//        currentList.add(todoItem)
-//        listTasks.postValue(currentList)
-
-//        listTasks.value = listTasks.value?.plus(todoItem)
 
         val tempList = listTasks.value?.toMutableList() ?: mutableListOf()
         val tempAllList = allTasks.value?.toMutableList() ?: mutableListOf()

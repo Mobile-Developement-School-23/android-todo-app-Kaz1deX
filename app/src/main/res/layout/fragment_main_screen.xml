@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/back_primary"
     tools:context=".fragments.MainScreenFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -16,7 +17,7 @@
         android:clickable="true"
         android:contentDescription="No fab"
         android:src="@android:drawable/ic_input_add"
-        app:backgroundTint="@color/blue_theme"
+        app:backgroundTint="@color/color_blue"
         app:fabSize="auto"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -27,13 +28,14 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:background="@color/main_theme"
+        android:background="@color/back_primary"
         app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/recycler_card_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/back_primary"
             app:cardCornerRadius="15dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -42,7 +44,8 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:background="@color/back_secondary">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recycler_tasks"
@@ -50,6 +53,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
+                    android:background="@color/back_secondary"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -67,6 +71,7 @@
         android:id="@+id/appbar_main_screen"
         android:layout_width="match_parent"
         android:layout_height="130dp"
+        android:background="@color/back_primary"
         android:fitsSystemWindows="true"
         android:theme="@style/main_style">
 
@@ -74,11 +79,13 @@
             android:id="@+id/collapsing_toolbar_main_screen"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/back_primary"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
+            app:collapsedTitleTextColor="@color/label_primary"
+            app:expandedTitleMarginBottom="40dp"
+            app:expandedTitleTextColor="@color/label_primary"
             app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"
-            app:title="@string/page_title"
-            app:expandedTitleMarginBottom="40dp">
+            app:title="@string/page_title">
 
             <TextView
                 android:id="@+id/title_text_collapsing"
@@ -88,8 +95,17 @@
                 android:layout_marginLeft="33dp"
                 android:layout_marginBottom="10dp"
                 android:text="Выполнено - 0"
+                android:textColor="@color/label_tertiary"
                 android:textSize="16sp"
                 app:layout_collapseMode="parallax" />
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/toolbar_main_screen"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/back_primary"
+                app:layout_collapseMode="pin"
+                app:titleTextColor="@color/back_primary" />
 
             <ImageButton
                 android:id="@+id/eye_button"
@@ -98,13 +114,7 @@
                 android:layout_gravity="bottom|right"
                 android:background="@android:color/transparent"
                 android:contentDescription="NoButton"
-                android:src="@drawable/visibility"/>
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_main_screen"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin" />
+                android:src="@drawable/visibility" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

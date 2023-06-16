@@ -1,5 +1,6 @@
 package com.example.petruninkotlinyandex.fragments
 
+import com.example.petruninkotlinyandex.gesture.SwipeGesture
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
@@ -18,10 +21,13 @@ import com.example.petruninkotlinyandex.data.TaskViewModel
 import com.example.petruninkotlinyandex.adapters.TasksAdapter
 import com.example.petruninkotlinyandex.data.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 
 class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private lateinit var tasksRecyclerView: RecyclerView
+    private val tasksAdapter = TasksAdapter()
     private val taskViewModel: TaskViewModel by activityViewModels()
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -36,7 +42,6 @@ class MainScreenFragment : Fragment() {
 
         tasksRecyclerView =  binding.recyclerTasks
 
-        val tasksAdapter = TasksAdapter()
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
 
         binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
@@ -84,6 +89,32 @@ class MainScreenFragment : Fragment() {
                 taskViewModel.setEyeVisibility(true)
             }
         }
+
+        swipeToGesture(tasksRecyclerView)
+    }
+
+    private fun swipeToGesture(itemRecyclerView: RecyclerView?){
+        val swipeGesture = object : SwipeGesture(requireContext()){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.absoluteAdapterPosition
+                try{
+                    when(direction){
+                        ItemTouchHelper.LEFT->{
+                            val deleteItem = taskViewModel.getTaskByIndex(position)
+                            if (deleteItem != null) {
+                                taskViewModel.deleteTaskFromRepository(deleteItem)
+                                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+                            }
+                        }
+                    }
+                }
+                catch (e: Exception){
+                    Toast.makeText(this@MainScreenFragment.requireContext(), e.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+        val touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(itemRecyclerView)
     }
 
     override fun onDestroyView() {

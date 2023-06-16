@@ -66,7 +66,7 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
         else {
             compoundButton.paintFlags = compoundButton.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
 //            compoundButton.setTextColor(ContextCompat.getColor(compoundButton.context, R.color.white))
-            compoundButton.setTextColor(ContextCompat.getColor(compoundButton.context, R.color.black))
+            compoundButton.setTextColor(ContextCompat.getColor(compoundButton.context, R.color.label_primary))
 
             if (isHighImportance) compoundButton.setButtonDrawable(R.drawable.unchecked__red)
             else compoundButton.setButtonDrawable(R.drawable.unchecked_empty)

@@ -1,6 +1,7 @@
 package com.example.petruninkotlinyandex.fragments
 
 import android.app.DatePickerDialog
+import android.graphics.Color
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.ForegroundColorSpan
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.PopupMenu
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
@@ -22,6 +24,7 @@ import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.TaskViewModel
 import com.example.petruninkotlinyandex.data.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentAddTaskBinding
+import java.lang.reflect.Field
 import java.util.*
 
 class AddTaskFragment : Fragment() {
@@ -56,7 +59,7 @@ class AddTaskFragment : Fragment() {
         pastTask()
 
         if (taskViewModel.getCurrentTask() == null) {
-            binding.deleteText.setTextColor(ContextCompat.getColor(binding.deleteText.context, R.color.gray_checkbox))
+            binding.deleteText.setTextColor(ContextCompat.getColor(binding.deleteText.context, R.color.label_primary))
             binding.deleteText.setCompoundDrawablesRelativeWithIntrinsicBounds(ContextCompat.getDrawable(
                 binding.deleteText.context, R.drawable.delete_gray), null, null, null)
         }
@@ -122,7 +125,7 @@ class AddTaskFragment : Fragment() {
             binding.textImportance.setTextColor(
                 ContextCompat.getColor(
                     binding.importanceButton.context,
-                    R.color.red_high_importance
+                    R.color.color_red
                 )
             )
         }
@@ -139,15 +142,15 @@ class AddTaskFragment : Fragment() {
 
         var highImportance = popupMenu.menu.getItem(2)
         var spannable: SpannableString = SpannableString(highImportance.title.toString())
-        spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.red_high_importance)), 0, spannable.length, 0)
+        spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.color_red)), 0, spannable.length, 0)
         highImportance.title = spannable
 
         popupMenu.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { menuItem: MenuItem? ->
             binding.textImportance.text = menuItem?.title
             if(menuItem!!.itemId == R.id.menu_high)
-                binding.textImportance.setTextColor(ContextCompat.getColor(view.context, R.color.red_high_importance))
+                binding.textImportance.setTextColor(ContextCompat.getColor(view.context, R.color.color_red))
             else
-                binding.textImportance.setTextColor(ContextCompat.getColor(view.context, R.color.gray_text))
+                binding.textImportance.setTextColor(ContextCompat.getColor(view.context, R.color.label_disable))
             true
         })
         popupMenu.show()

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/main_theme"
+    android:background="@color/back_primary"
     tools:context=".fragments.AddTaskFragment">
 
 
@@ -12,6 +12,7 @@
         android:id="@+id/tool_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/back_primary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:padding="5dp"
             android:src="@drawable/close"
-            android:tint="@color/black"
+            android:tint="@color/label_primary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,9 +38,8 @@
             android:layout_gravity="right"
             android:layout_marginRight="15dp"
             android:text="СОХРАНИТЬ"
-            android:textColor="@color/blue_theme"
+            android:textColor="@color/color_blue"
             android:textSize="16sp"
-            android:tint="@color/black"
             app:fontFamily="@font/roboto_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -51,6 +51,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="15dp"
+        android:background="@color/back_primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,6 +60,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/back_primary"
             android:orientation="vertical">
 
             <androidx.cardview.widget.CardView
@@ -68,22 +70,26 @@
                 android:layout_gravity="center"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
+                android:background="@color/back_secondary"
                 app:cardCornerRadius="10dp">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/constraint_text"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:background="@color/back_secondary">
 
                     <EditText
                         android:id="@+id/new_text_task"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:backgroundTint="#FFFFFF"
+                        android:backgroundTint="@color/back_secondary"
                         android:gravity="start"
                         android:hint="Что надо сделать..."
                         android:minLines="5"
                         android:paddingStart="15dp"
+                        android:textColor="@color/label_primary"
+                        android:textColorHint="@color/label_tertiary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -108,7 +114,7 @@
                 android:paddingBottom="0dp"
                 android:text="Важность"
                 android:textAllCaps="false"
-                android:textColor="@color/black" />
+                android:textColor="@color/label_primary" />
 
             <TextView
                 android:id="@+id/text_importance"
@@ -116,7 +122,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:fontFamily="@font/roboto"
-                android:text="Нет" />
+                android:text="Нет"
+                android:textColor="@color/label_tertiary" />
 
             <View
                 android:id="@+id/line1"
@@ -125,7 +132,7 @@
                 android:layout_marginLeft="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginRight="15dp"
-                android:background="@color/gray_text"
+                android:background="@color/support_separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_importance" />
@@ -139,21 +146,8 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginRight="5dp"
                 android:text="Сделать до"
+                android:textColor="@color/label_primary"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/data_main_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_marginTop="20dp"
-                android:fontFamily="@font/roboto"
-                android:text="Сделать до"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:visibility="gone"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/line1" />
 
             <TextView
                 android:id="@+id/date_text"
@@ -161,7 +155,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
                 android:fontFamily="@font/roboto"
-                android:textColor="@color/blue_theme"
+                android:textColor="@color/color_blue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/data_main_text" />
 
@@ -170,7 +164,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:layout_marginTop="40dp"
-                android:background="@color/gray_text"
+                android:background="@color/support_separator"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -183,11 +177,11 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="50dp"
-                android:drawableStart="@drawable/delete"
+                android:drawableStart="@drawable/delete_red"
                 android:drawablePadding="20dp"
                 android:fontFamily="@font/roboto"
                 android:text="Удалить"
-                android:textColor="#FD0000" />
+                android:textColor="@color/color_red" />
 
         </LinearLayout>
     </ScrollView>

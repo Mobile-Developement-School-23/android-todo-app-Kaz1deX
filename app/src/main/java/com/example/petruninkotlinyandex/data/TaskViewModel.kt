@@ -1,10 +1,13 @@
 package com.example.petruninkotlinyandex.data
 
 import android.content.Context
+import android.icu.text.SimpleDateFormat
+import android.icu.util.Calendar
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.petruninkotlinyandex.data.TodoItem
 import com.example.petruninkotlinyandex.repositories.TodoItemsRepository
+import java.util.*
 
 open class TaskViewModel: ViewModel() {
 //    val textTask: MutableLiveData<String> by lazy { MutableLiveData<String>() }
@@ -67,4 +70,6 @@ open class TaskViewModel: ViewModel() {
     fun deleteData() {
         currentTask?.deadlineDate = ""
     }
+
+    fun getTaskByIndex(index: Int) = tasks.value?.get(index)
 }
