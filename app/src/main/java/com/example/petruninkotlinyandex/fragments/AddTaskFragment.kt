@@ -35,7 +35,6 @@ class AddTaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         // Получаем позицию задачи из переданных аргументов
         val positionTask = arguments?.getInt("currentModel") ?: -1
         // Установка текущей задачи

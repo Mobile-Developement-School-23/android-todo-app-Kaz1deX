@@ -15,7 +15,7 @@ open class TaskViewModel: ViewModel() {
     private var eyeIsVisibility: Boolean = true
 
     // Счетчик выполненных задач
-    private var counterCompleteTasks: Int = 0
+    private var counterCompleteTasks: Int = 3
 
     // Получение списка задач
     fun getTasks(): MutableLiveData<List<TodoItem>> {

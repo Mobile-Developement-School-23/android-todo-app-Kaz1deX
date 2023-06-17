@@ -18,17 +18,18 @@ class TodoItemsRepository {
     init {
         listTasks.value = ArrayList()
         // Добавление тестовых задач в репозиторий
-        addTaskToRepository(TodoItem("Убраться в квартире1", "Высокий"))
-        addTaskToRepository(TodoItem("Убраться в квартире2", "Нет"))
-        addTaskToRepository(TodoItem("Убраться в квартире3", "Низкий"))
-        addTaskToRepository(TodoItem("Убраться в квартире4", "Высокий"))
-        addTaskToRepository(TodoItem("Убраться в квартире5", "Нет"))
-        addTaskToRepository(TodoItem("Убраться в квартире6", "Низкий"))
-        addTaskToRepository(TodoItem("Купить что-то", "Высокий"))
-        addTaskToRepository(TodoItem("Погулять на улице", "Нет"))
+        addTaskToRepository(TodoItem("Убраться в квартире", "Высокий"))
+        addTaskToRepository(TodoItem("Сходить на рыбалку", "Нет"))
+        addTaskToRepository(TodoItem("Очень важно купить тот самый чайник по скидки, " +
+                "а то потом будет дорого стоит, а ведь он такоц красивый", "Высокий"))
+        addTaskToRepository(TodoItem("Купить новый учебник для школы", "Высокий"))
+        addTaskToRepository(TodoItem("Поспать", "Нет", isCompleted=true))
+        addTaskToRepository(TodoItem("Продлить подписку на облачный сервис вовремя", "Низкий"))
+        addTaskToRepository(TodoItem("Купить что-то", "Высокий", deadlineDate="18 июня 2023"))
+        addTaskToRepository(TodoItem("Погулять на улице", "Нет", isCompleted=true))
         addTaskToRepository(TodoItem("Записаться на встречу с очень важным человеком, " +
                 "главное не забыть, а то  будет очень плохо, прям ооочень", "Высокий"))
-        addTaskToRepository(TodoItem("Написать доклад", "Высокий"))
+        addTaskToRepository(TodoItem("Написать доклад", "Высокий", isCompleted=true, currentDate="16 июня 2023"))
     }
 
     // Возвращает список задач в виде MutableLiveData
