@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.adapters
+package com.example.petruninkotlinyandex.ui.adapter
 
 import android.graphics.Paint
 import android.os.Bundle
@@ -12,10 +12,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.TodoItem
+import com.example.petruninkotlinyandex.data.database.TodoItemEntity
 
 class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
-    lateinit var tasksList: MutableLiveData<List<TodoItem>>
+    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
 
     // ViewHolder для элементов списка задач в RecyclerView
@@ -39,7 +39,7 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
 
     // Связывает данные с элементом ViewHolder
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
-        val todoItem: TodoItem = tasksList.value?.get(position) ?: return
+        val todoItem: TodoItemEntity = tasksList.value?.get(position) ?: return
 
         // Устанавливаем текст и состояние флажка CheckBox на основе данных задачи
         holder.checkBox.text = todoItem.checkBoxTaskText
@@ -96,6 +96,6 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
 
     // Интерфейс определяет метод onItemClick() для обработки кликов на элементах списка задач
     interface OnItemClickListener {
-        fun onItemClick(todoItem: TodoItem)
+        fun onItemClick(todoItem: TodoItemEntity)
     }
 }

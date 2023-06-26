@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.data
+package com.example.petruninkotlinyandex.data.model
 
 // Модель элемента задачи
 data class TodoItem(

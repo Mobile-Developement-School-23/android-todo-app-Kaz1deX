@@ -1,12 +1,12 @@
-package com.example.petruninkotlinyandex.adapters
+package com.example.petruninkotlinyandex.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.petruninkotlinyandex.data.TodoItem
+import com.example.petruninkotlinyandex.data.database.TodoItemEntity
 
 // Дополнительное задание (использовать не удалось)
 class DiffUtilTasks(
-    private val oldTasks: List<TodoItem>,
-    private val newTasks: List<TodoItem>
+    private val oldTasks: List<TodoItemEntity>,
+    private val newTasks: List<TodoItemEntity>
     ): DiffUtil.Callback() {
 
     // Возвращает размер старого списка задач

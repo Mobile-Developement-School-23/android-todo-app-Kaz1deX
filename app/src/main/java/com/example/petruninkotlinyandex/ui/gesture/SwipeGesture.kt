@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.gesture
+package com.example.petruninkotlinyandex.ui.gesture
 
 import android.content.Context
 import android.graphics.Canvas

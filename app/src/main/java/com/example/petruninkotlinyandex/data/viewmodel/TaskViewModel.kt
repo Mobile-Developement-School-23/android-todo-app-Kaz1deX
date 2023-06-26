@@ -1,15 +1,16 @@
-package com.example.petruninkotlinyandex.data
+package com.example.petruninkotlinyandex.data.viewmodel
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.petruninkotlinyandex.repositories.TodoItemsRepository
+import com.example.petruninkotlinyandex.data.database.TodoItemEntity
+import com.example.petruninkotlinyandex.data.repository.TodoItemsRepository
 
 open class TaskViewModel: ViewModel() {
     private val todoItemsRepository = TodoItemsRepository()
-    private var tasks: MutableLiveData<List<TodoItem>> = todoItemsRepository.getTasks()
+    private var tasks: MutableLiveData<List<TodoItemEntity>> = todoItemsRepository.getTasks()
 
     // Текущая задача, с которой необходимо работать
-    private var currentTask: TodoItem? = null
+    private var currentTask: TodoItemEntity? = null
 
     // Состояние нажатия кнопки, скрывающей выполненные задачи
     private var eyeIsVisibility: Boolean = true
@@ -18,17 +19,17 @@ open class TaskViewModel: ViewModel() {
     private var counterCompleteTasks: Int = 3
 
     // Получение списка задач
-    fun getTasks(): MutableLiveData<List<TodoItem>> {
+    fun getTasks(): MutableLiveData<List<TodoItemEntity>> {
         return tasks
     }
 
     // Добавление задачи в репозиторий
-    fun addTaskToRepository(todoItem: TodoItem) {
+    fun addTaskToRepository(todoItem: TodoItemEntity) {
         todoItemsRepository.addTaskToRepository(todoItem)
     }
 
     // Удаление задачи из репозитория
-    fun deleteTaskFromRepository(todoItem: TodoItem) {
+    fun deleteTaskFromRepository(todoItem: TodoItemEntity) {
         todoItemsRepository.deleteTaskFromRepository(todoItem)
 
         // Если задача завершена, уменьшаем счетчик завершенных задач
@@ -38,7 +39,7 @@ open class TaskViewModel: ViewModel() {
     }
 
     // Установка текущей задачи
-    fun setCurrentTask(todoItem: TodoItem) {
+    fun setCurrentTask(todoItem: TodoItemEntity) {
         currentTask = todoItem
     }
 
@@ -48,7 +49,7 @@ open class TaskViewModel: ViewModel() {
     }
 
     // Получение задачи по позиции
-    fun getTaskByPosition(position: Int): TodoItem {
+    fun getTaskByPosition(position: Int): TodoItemEntity {
         return todoItemsRepository.getTaskByPosition(position)
     }
 

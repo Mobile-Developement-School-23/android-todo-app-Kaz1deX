@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.fragments
+package com.example.petruninkotlinyandex.ui.fragments
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -14,8 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.TaskViewModel
-import com.example.petruninkotlinyandex.data.TodoItem
+import com.example.petruninkotlinyandex.data.viewmodel.TaskViewModel
+import com.example.petruninkotlinyandex.data.database.TodoItemEntity
 import com.example.petruninkotlinyandex.databinding.FragmentAddTaskBinding
 import java.util.*
 
@@ -108,7 +108,7 @@ class AddTaskFragment : Fragment() {
 
                 // Проверка на то, что задача создается, а не редактируется
                 if(taskViewModel.getCurrentTask() == null){
-                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
+                    taskViewModel.addTaskToRepository(TodoItemEntity(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
                 }
                 // Если редактируется, то изменить данные уже существующей задачи
                 else{

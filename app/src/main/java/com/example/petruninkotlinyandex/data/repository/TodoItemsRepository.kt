@@ -1,9 +1,9 @@
-package com.example.petruninkotlinyandex.repositories
+package com.example.petruninkotlinyandex.data.repository
 
 import android.icu.text.SimpleDateFormat
 import android.icu.util.Calendar
 import androidx.lifecycle.MutableLiveData
-import com.example.petruninkotlinyandex.data.TodoItem
+import com.example.petruninkotlinyandex.data.model.TodoItem
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -20,15 +20,19 @@ class TodoItemsRepository {
         // Добавление тестовых задач в репозиторий
         addTaskToRepository(TodoItem("Убраться в квартире", "Высокий"))
         addTaskToRepository(TodoItem("Сходить на рыбалку", "Нет"))
-        addTaskToRepository(TodoItem("Очень важно купить тот самый чайник по скидки, " +
-                "а то потом будет дорого стоит, а ведь он такоц красивый", "Высокий"))
+        addTaskToRepository(
+            TodoItem("Очень важно купить тот самый чайник по скидки, " +
+                "а то потом будет дорого стоит, а ведь он такоц красивый", "Высокий")
+        )
         addTaskToRepository(TodoItem("Купить новый учебник для школы", "Высокий"))
         addTaskToRepository(TodoItem("Поспать", "Нет", isCompleted=true))
         addTaskToRepository(TodoItem("Продлить подписку на облачный сервис вовремя", "Низкий"))
         addTaskToRepository(TodoItem("Купить что-то", "Высокий", deadlineDate="18 июня 2023"))
         addTaskToRepository(TodoItem("Погулять на улице", "Нет", isCompleted=true))
-        addTaskToRepository(TodoItem("Записаться на встречу с очень важным человеком, " +
-                "главное не забыть, а то  будет очень плохо, прям ооочень", "Высокий"))
+        addTaskToRepository(
+            TodoItem("Записаться на встречу с очень важным человеком, " +
+                "главное не забыть, а то  будет очень плохо, прям ооочень", "Высокий")
+        )
         addTaskToRepository(TodoItem("Написать доклад", "Высокий", isCompleted=true, currentDate="16 июня 2023"))
     }
 

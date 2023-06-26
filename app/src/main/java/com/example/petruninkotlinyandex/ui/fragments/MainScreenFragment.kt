@@ -1,6 +1,6 @@
-package com.example.petruninkotlinyandex.fragments
+package com.example.petruninkotlinyandex.ui.fragments
 
-import com.example.petruninkotlinyandex.gesture.SwipeGesture
+import com.example.petruninkotlinyandex.ui.gesture.SwipeGesture
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.TaskViewModel
-import com.example.petruninkotlinyandex.adapters.TasksAdapter
-import com.example.petruninkotlinyandex.data.TodoItem
+import com.example.petruninkotlinyandex.data.viewmodel.TaskViewModel
+import com.example.petruninkotlinyandex.ui.adapter.TasksAdapter
+import com.example.petruninkotlinyandex.data.database.TodoItemEntity
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
 
 // Основной фрагмент со списком задач
@@ -46,7 +46,7 @@ class MainScreenFragment : Fragment() {
 
         // Обработчик нажатия на элемент списка задач
         tasksAdapter.setOnClickListener(object: TasksAdapter.OnItemClickListener {
-            override fun onItemClick(todoItem: TodoItem) {
+            override fun onItemClick(todoItem: TodoItemEntity) {
                 // Если задача из выполненной стала невыполненной
                 if (!todoItem.isCompleted) taskViewModel.minusCounterCompleteTasks()
                 // Если задача из невыполненной стала выполненной
