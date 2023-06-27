@@ -1,6 +1,7 @@
 package com.example.petruninkotlinyandex.ui.viewModel
 
 import android.text.format.DateFormat
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,11 +9,13 @@ import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.data.repository.TodoItemsRepository
 import com.example.petruninkotlinyandex.locateLazy
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.shareIn
 import kotlinx.coroutines.launch
 import java.util.*
+import kotlin.coroutines.coroutineContext
 
 open class TaskViewModel: ViewModel() {
     private val todoItemsRepository: TodoItemsRepository by locateLazy()
@@ -25,18 +28,35 @@ open class TaskViewModel: ViewModel() {
         }
     }
 
+    // Добавление задачи в репозиторий
+//    fun addTaskToRepository(todoItem: TodoItem) {
+//        todoItemsRepository.addTaskToRepository(todoItem)
+//    }
+
     fun delete(todoItem: TodoItemEntity) {
         viewModelScope.launch {
             todoItemsRepository.delete(todoItem)
+            if (todoItem.isCompleted) minusCounterCompleteTasks()
         }
     }
+
+    // Удаление задачи из репозитория
+//    fun deleteTaskFromRepository(todoItem: TodoItem) {
+//        todoItemsRepository.deleteTaskFromRepository(todoItem)
+//
+//        // Если задача завершена, уменьшаем счетчик завершенных задач
+//        if (todoItem.isCompleted) {
+//            minusCounterCompleteTasks()
+//        }
+//    }
+
+    // Текущая задача, с которой необходимо работать
+    private var currentTask: TodoItemEntity? = null
 
     private fun <T> Flow<T>.asLiveDataFlow() = shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
 
 //    private var tasks: MutableLiveData<List<TodoItemEntity>> = todoItemsRepository.getTasks()
 
-    // Текущая задача, с которой необходимо работать
-    private var currentTask: TodoItemEntity? = null
 
     // Состояние нажатия кнопки, скрывающей выполненные задачи
     private var eyeIsVisibility: Boolean = true
@@ -47,21 +67,6 @@ open class TaskViewModel: ViewModel() {
     // Получение списка задач
 //    fun getTasks(): MutableLiveData<List<TodoItemEntity>> {
 //        return tasks
-//    }
-
-    // Добавление задачи в репозиторий
-//    fun addTaskToRepository(todoItem: TodoItem) {
-//        todoItemsRepository.addTaskToRepository(todoItem)
-//    }
-
-    // Удаление задачи из репозитория
-//    fun deleteTaskFromRepository(todoItem: TodoItem) {
-//        todoItemsRepository.deleteTaskFromRepository(todoItem)
-//
-//        // Если задача завершена, уменьшаем счетчик завершенных задач
-//        if (todoItem.isCompleted) {
-//            minusCounterCompleteTasks()
-//        }
 //    }
 
     // Установка текущей задачи

@@ -10,8 +10,10 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.ui.viewModel.TaskViewModel
@@ -23,6 +25,7 @@ import java.util.*
 class AddTaskFragment : Fragment() {
     private var _binding: FragmentAddTaskBinding? = null
     private val binding get() = _binding!!
+//    private val taskViewModel: TaskViewModel by viewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
 
     override fun onCreateView(
@@ -36,7 +39,7 @@ class AddTaskFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Получаем позицию задачи из переданных аргументов
-        val positionTask = arguments?.getInt("currentModel") ?: -1
+//        val positionTask = arguments?.getInt("currentModel") ?: -1
         // Установка текущей задачи
 //        if (positionTask != -1) taskViewModel.setCurrentTask(taskViewModel.getTaskByPosition(positionTask))
 
@@ -132,6 +135,7 @@ class AddTaskFragment : Fragment() {
         val todoItem = taskViewModel.getCurrentTask() ?: return
         var importanceTask = todoItem?.importance
         binding.newTextTask.setText(todoItem?.checkBoxTaskText)
+//        Toast.makeText(requireActivity(), "OKOKOKO", Toast.LENGTH_LONG).show()
 
         // Подстановка важности задачи
         if(importanceTask.equals("Высокий")) {

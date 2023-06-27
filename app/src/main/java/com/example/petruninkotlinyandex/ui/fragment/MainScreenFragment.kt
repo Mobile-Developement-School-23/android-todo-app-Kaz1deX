@@ -31,7 +31,7 @@ class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private lateinit var tasksRecyclerView: RecyclerView
     private val tasksAdapter = TasksAdapter()
-    private val taskViewModel: TaskViewModel by viewModels()
+    private val taskViewModel: TaskViewModel by activityViewModels()
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -64,6 +64,10 @@ class MainScreenFragment : Fragment() {
 //                if (!taskViewModel.getEyeVisibility()) taskViewModel.hideCompleteTasks()
                 // Обновление счетчика выполненных задач
                 binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+            }
+
+            override fun onButtonInfoClick(todoItem: TodoItemEntity) {
+                taskViewModel.setCurrentTask(todoItem)
             }
         })
 
@@ -120,10 +124,11 @@ class MainScreenFragment : Fragment() {
 //                try{
 //                    when(direction){
 //                        ItemTouchHelper.LEFT->{
-//                            val deleteItem = taskViewModel.getTaskByIndex(position)
+////                            val deleteItem = taskViewModel.getTaskByIndex(position)
 //                            if (deleteItem != null) {
 //                                // Удаление задачи из списка после свайпа
-//                                taskViewModel.deleteTaskFromRepository(deleteItem)
+////                                taskViewModel.deleteTaskFromRepository(deleteItem)
+//                                taskViewModel.delete(deleteItem)
 //                                // Обновление счетчика выполненных задач
 //                                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
 //                            }

@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
@@ -21,11 +22,13 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
 //    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
     lateinit var tasksList: Flow<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
+    private var onItemInfoClickListener: OnItemClickListener? = null
 
     // ViewHolder для элементов списка задач в RecyclerView
     class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         //    private val binding = ItemListBinding.bind(itemView)
         var checkBox: CheckBox = itemView.findViewById(R.id.checkBox_task)
+        var buttonInfo: ImageView = itemView.findViewById(R.id.info_task)
     }
 
     // Вызывается, когда RecyclerView нуждается в новом ViewHolder для отображения элемента
@@ -74,11 +77,13 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
 //            // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
 //            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
 //        }
-        holder.itemView.setOnClickListener {
-            val transferData: Bundle = Bundle()
-            transferData.putInt("currentModel", position)
+        holder.buttonInfo.setOnClickListener {
+//            val transferData: Bundle = Bundle()
+            onItemClickListener?.onButtonInfoClick(todoItem)
+            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment)
+//            transferData.putInt("currentModel", position)
             // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
-            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
+//            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
         }
     }
 
@@ -111,6 +116,7 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
     // Интерфейс определяет метод onItemClick() для обработки кликов на элементах списка задач
     interface OnItemClickListener {
         fun onItemClick(todoItem: TodoItemEntity)
+        fun onButtonInfoClick(todoItem: TodoItemEntity)
     }
 }
 
