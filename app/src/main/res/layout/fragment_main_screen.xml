@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/back_primary"
-    tools:context=".ui.fragments.MainScreenFragment">
+    tools:context=".ui.fragment.MainScreenFragment">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/add_button"
@@ -16,6 +16,7 @@
         android:layout_marginBottom="30dp"
         android:clickable="true"
         android:contentDescription="No fab"
+        android:tint="@color/color_white"
         android:src="@android:drawable/ic_input_add"
         app:backgroundTint="@color/color_blue"
         app:fabSize="auto"

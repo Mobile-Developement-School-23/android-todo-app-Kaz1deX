@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.ui.fragments
+package com.example.petruninkotlinyandex.ui.fragment
 
 import android.app.DatePickerDialog
 import android.os.Bundle
@@ -14,8 +14,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.viewmodel.TaskViewModel
-import com.example.petruninkotlinyandex.data.database.TodoItemEntity
+import com.example.petruninkotlinyandex.ui.viewModel.TaskViewModel
+import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import com.example.petruninkotlinyandex.databinding.FragmentAddTaskBinding
 import java.util.*
 
@@ -28,7 +28,7 @@ class AddTaskFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentAddTaskBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -38,7 +38,7 @@ class AddTaskFragment : Fragment() {
         // Получаем позицию задачи из переданных аргументов
         val positionTask = arguments?.getInt("currentModel") ?: -1
         // Установка текущей задачи
-        if (positionTask != -1) taskViewModel.setCurrentTask(taskViewModel.getTaskByPosition(positionTask))
+//        if (positionTask != -1) taskViewModel.setCurrentTask(taskViewModel.getTaskByPosition(positionTask))
 
         // Обработчик нажатия на кнопку закрытия
         binding.toolbarButtonClose.setOnClickListener {
@@ -64,7 +64,8 @@ class AddTaskFragment : Fragment() {
         else {
             // Обработчик нажатия на кнопку удаления задачи
             binding.deleteText.setOnClickListener {
-                taskViewModel.getCurrentTask()?.let { itt -> taskViewModel.deleteTaskFromRepository(itt) }
+//                taskViewModel.getCurrentTask()?.let { itt -> taskViewModel.deleteTaskFromRepository(itt) }
+                taskViewModel.getCurrentTask()?.let { itt -> taskViewModel.delete(itt) }
                 view?.findNavController()?.navigateUp()
             }
         }
@@ -108,7 +109,8 @@ class AddTaskFragment : Fragment() {
 
                 // Проверка на то, что задача создается, а не редактируется
                 if(taskViewModel.getCurrentTask() == null){
-                    taskViewModel.addTaskToRepository(TodoItemEntity(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
+//                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
+                    taskViewModel.insert(TodoItemEntity(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
                 }
                 // Если редактируется, то изменить данные уже существующей задачи
                 else{

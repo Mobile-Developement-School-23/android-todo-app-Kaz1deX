@@ -10,12 +10,16 @@ import android.widget.CompoundButton
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.database.TodoItemEntity
+import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
+import kotlinx.coroutines.flow.Flow
 
-class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
-    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
+class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
+//    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
+    lateinit var tasksList: Flow<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
 
     // ViewHolder для элементов списка задач в RecyclerView
@@ -31,20 +35,24 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
     }
 
     // Возвращает общее количество элементов в списке задач
-    override fun getItemCount(): Int {
-        if(tasksList.value != null)
-            return tasksList.value!!.size
-        return 0
-    }
+//    override fun getItemCount(): Int {
+////        if(tasksList.value != null)
+////            return tasksList.value!!.size
+////        return 0
+//
+//        if(tasksList != null)
+//            return tasksList.value!!.size
+//        return 0
+//    }
 
     // Связывает данные с элементом ViewHolder
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
-        val todoItem: TodoItemEntity = tasksList.value?.get(position) ?: return
+//        val todoItem: TodoItemEntity = tasksList.value?.get(position) ?: return
+        val todoItem = getItem(position)
 
         // Устанавливаем текст и состояние флажка CheckBox на основе данных задачи
         holder.checkBox.text = todoItem.checkBoxTaskText
         holder.checkBox.isChecked = todoItem.isCompleted
-
         // Проверяем важность задачи и обновляем внешний вид CheckBox в соответствии с состоянием и важностью
         val importanceHigh: Boolean = todoItem.importance == "Высокий"
         updateTask(holder.checkBox, todoItem.isCompleted, importanceHigh)
@@ -60,6 +68,12 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
         }
 
         // Устанавливаем слушатель клика для элемента списка задач
+//        holder.itemView.setOnClickListener {
+//            val transferData: Bundle = Bundle()
+//            transferData.putInt("currentModel", position)
+//            // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
+//            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
+//        }
         holder.itemView.setOnClickListener {
             val transferData: Bundle = Bundle()
             transferData.putInt("currentModel", position)
@@ -98,4 +112,9 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
     interface OnItemClickListener {
         fun onItemClick(todoItem: TodoItemEntity)
     }
+}
+
+class TaskDiffCallback: DiffUtil.ItemCallback<TodoItemEntity>() {
+    override fun areItemsTheSame(oldItem: TodoItemEntity, newItem: TodoItemEntity): Boolean = oldItem.idTask == newItem.idTask
+    override fun areContentsTheSame(oldItem: TodoItemEntity, newItem: TodoItemEntity): Boolean = oldItem == newItem
 }

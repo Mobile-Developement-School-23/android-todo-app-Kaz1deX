@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.data.database
+package com.example.petruninkotlinyandex.data.dataBase
 
 import android.content.Context
 import androidx.room.Database
@@ -9,10 +9,12 @@ import androidx.room.RoomDatabase
 abstract class TodoItemDatabase: RoomDatabase() {
     abstract val todoItemDao: TodoItemDao
     companion object {
-        fun create(context: Context) = Room.databaseBuilder(
-            context,
-            TodoItemDatabase::class.java,
-            "todoitem-database"
-        )
+        fun create(context: Context) = Room
+            .databaseBuilder(
+                context,
+                TodoItemDatabase::class.java,
+                "todoItem-database"
+            )
+            .build()
     }
 }
