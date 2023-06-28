@@ -1,5 +1,6 @@
 package com.example.petruninkotlinyandex.data.dataBase
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
 
@@ -13,4 +14,13 @@ interface TodoItemDao {
 
     @Query("SELECT * FROM task_table")
     fun getAllTasks(): Flow<List<TodoItemEntity>>
+
+    @Query("SELECT * FROM task_table WHERE isCompleted = 0")
+    fun getUncompletedTasks(): Flow<List<TodoItemEntity>>
+
+    @Query("SELECT COUNT(*) FROM task_table WHERE isCompleted = 1")
+    fun getCountCompleted(): LiveData<Int>
+
+    @Update
+    suspend fun updateTask(todoItem: TodoItemEntity)
 }

@@ -26,7 +26,8 @@ class AddTaskFragment : Fragment() {
     private var _binding: FragmentAddTaskBinding? = null
     private val binding get() = _binding!!
 //    private val taskViewModel: TaskViewModel by viewModels()
-    private val taskViewModel: TaskViewModel by activityViewModels()
+//    private val taskViewModel: TaskViewModel by activityViewModels()
+    private val taskViewModel = TaskViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -113,7 +114,8 @@ class AddTaskFragment : Fragment() {
                 // Проверка на то, что задача создается, а не редактируется
                 if(taskViewModel.getCurrentTask() == null){
 //                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
-                    taskViewModel.insert(TodoItemEntity(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
+                    taskViewModel.insert(TodoItemEntity(checkBoxTaskText = binding.newTextTask.text.toString(),
+                        importance = importance, currentDate = binding.dateText.text.toString()))
                 }
                 // Если редактируется, то изменить данные уже существующей задачи
                 else{

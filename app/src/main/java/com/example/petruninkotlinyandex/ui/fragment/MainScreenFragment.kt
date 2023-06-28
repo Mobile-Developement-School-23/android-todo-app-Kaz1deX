@@ -3,6 +3,7 @@ package com.example.petruninkotlinyandex.ui.fragment
 import com.example.petruninkotlinyandex.ui.gesture.SwipeGesture
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -23,15 +24,19 @@ import com.example.petruninkotlinyandex.ui.adapter.TasksAdapter
 import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 // Основной фрагмент со списком задач
 class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private lateinit var tasksRecyclerView: RecyclerView
-    private val tasksAdapter = TasksAdapter()
-    private val taskViewModel: TaskViewModel by activityViewModels()
+//    private val taskViewModel: TaskViewModel by activityViewModels()
+    private val taskViewModel = TaskViewModel()
+    private val tasksAdapter = TasksAdapter(taskViewModel.getAllTasks())
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -39,45 +44,54 @@ class MainScreenFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainScreenBinding.inflate(inflater, container, false)
+
+        taskViewModel.getCountCompleted().observe(viewLifecycleOwner) { count ->
+            binding.titleTextCollapsing.text = "Выполнено - ${count.toString()}"
+        }
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        taskViewModel.tasks.onEach(::renderTasks).launchIn(lifecycleScope)
+        taskViewModel.getAllTasks().onEach(::renderTasks).launchIn(lifecycleScope)
 
         tasksRecyclerView =  binding.recyclerTasks
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
         // Обновление счетчика выполненных задач
-        binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+//        binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+//        binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
+
+        tasksRecyclerView.adapter = tasksAdapter
+//        tasksAdapter.tasksList = taskViewModel.getTasks()
+//        tasksAdapter.tasksList = taskViewModel.getAllTasks()
+        tasksRecyclerView.layoutManager = layoutManager
 
         // Обработчик нажатия на элемент списка задач
         tasksAdapter.setOnClickListener(object: TasksAdapter.OnItemClickListener {
             override fun onItemClick(todoItem: TodoItemEntity) {
                 // Если задача из выполненной стала невыполненной
-                if (!todoItem.isCompleted) taskViewModel.minusCounterCompleteTasks()
-                // Если задача из невыполненной стала выполненной
-                else taskViewModel.plusCounterCompleteTasks()
+//                if (!todoItem.isCompleted) taskViewModel.minusCounterCompleteTasks()
+//                // Если задача из невыполненной стала выполненной
+//                else taskViewModel.plusCounterCompleteTasks()
 
                 // Скрывать выполненную задачу, если кнопка скрытия выполненных задач активна
 //                if (!taskViewModel.getEyeVisibility()) taskViewModel.hideCompleteTasks()
                 // Обновление счетчика выполненных задач
-                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+//                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
+//                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
+                taskViewModel.updateTask(todoItem)
             }
 
             override fun onButtonInfoClick(todoItem: TodoItemEntity) {
                 taskViewModel.setCurrentTask(todoItem)
+                Navigation.findNavController(view).navigate(R.id.action_mainScreenFragment_to_addTaskFragment)
             }
         })
 
-        tasksRecyclerView.adapter = tasksAdapter
-//        tasksAdapter.tasksList = taskViewModel.getTasks()
-        tasksAdapter.tasksList = taskViewModel.tasks
-        tasksRecyclerView.layoutManager = layoutManager
-
         // Изменение цвета плюса на белый на кнопке добавления
-//        binding.addButton.setColorFilter(Color.argb(255, 255, 255, 255))
+        binding.addButton.setColorFilter(Color.argb(255, 255, 255, 255))
 
         // Переход во второй фрагмент для добавления новой задачи
         binding.addButton.setOnClickListener {
@@ -90,8 +104,11 @@ class MainScreenFragment : Fragment() {
 //        } })
 
         binding.swipeRefreshLayoutMainScreen.setOnRefreshListener {
+//            binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
             binding.swipeRefreshLayoutMainScreen.isRefreshing = false
         }
+
+
 
         // Установка корректной иконки при создании фрагмента
         if (taskViewModel.getEyeVisibility()) binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
@@ -113,38 +130,40 @@ class MainScreenFragment : Fragment() {
 //            }
 //        }
 
-//        swipeToGesture(tasksRecyclerView)
+        swipeToGesture(tasksRecyclerView)
     }
 
     // Метод, осуществляющий свайп задачи влево для удаления
-//    private fun swipeToGesture(itemRecyclerView: RecyclerView?){
-//        val swipeGesture = object : SwipeGesture(requireContext()){
-//            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-//                val position = viewHolder.absoluteAdapterPosition
-//                try{
-//                    when(direction){
-//                        ItemTouchHelper.LEFT->{
-////                            val deleteItem = taskViewModel.getTaskByIndex(position)
-//                            if (deleteItem != null) {
-//                                // Удаление задачи из списка после свайпа
-////                                taskViewModel.deleteTaskFromRepository(deleteItem)
-//                                taskViewModel.delete(deleteItem)
-//                                // Обновление счетчика выполненных задач
+    private fun swipeToGesture(itemRecyclerView: RecyclerView?){
+        val swipeGesture = object : SwipeGesture(requireContext()){
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val position = viewHolder.absoluteAdapterPosition
+                try{
+                    when(direction){
+                        ItemTouchHelper.LEFT->{
+//                            val deleteItem = taskViewModel.getTaskByIndex(position)
+                            val deleteItem = tasksAdapter.getItemByPosition(position)
+                            if (deleteItem != null) {
+                                // Удаление задачи из списка после свайпа
+//                                taskViewModel.deleteTaskFromRepository(deleteItem)
+                                taskViewModel.delete(deleteItem)
+                                // Обновление счетчика выполненных задач
 //                                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
-//                            }
-//                        }
-//                    }
-//                }
-//                catch (e: Exception){
-//                    Toast.makeText(this@MainScreenFragment.requireContext(), e.message, Toast.LENGTH_LONG).show()
-//                }
-//            }
-//        }
-//
-//        // Обработка жестов свайпа
-//        val touchHelper = ItemTouchHelper(swipeGesture)
-//        touchHelper.attachToRecyclerView(itemRecyclerView)
-//    }
+//                                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
+                            }
+                        }
+                    }
+                }
+                catch (e: Exception){
+                    Toast.makeText(this@MainScreenFragment.requireContext(), e.message, Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+
+        // Обработка жестов свайпа
+        val touchHelper = ItemTouchHelper(swipeGesture)
+        touchHelper.attachToRecyclerView(itemRecyclerView)
+    }
 
     private fun renderTasks(tasks: List<TodoItemEntity>) {
         tasksAdapter.submitList(tasks)

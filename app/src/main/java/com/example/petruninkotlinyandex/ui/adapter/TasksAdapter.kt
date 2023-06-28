@@ -17,16 +17,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharedFlow
 
-class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
+class TasksAdapter(private val tasksList: SharedFlow<List<TodoItemEntity>>): ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
 //    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
-    lateinit var tasksList: Flow<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
     private var onItemInfoClickListener: OnItemClickListener? = null
 
     // ViewHolder для элементов списка задач в RecyclerView
     class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        //    private val binding = ItemListBinding.bind(itemView)
         var checkBox: CheckBox = itemView.findViewById(R.id.checkBox_task)
         var buttonInfo: ImageView = itemView.findViewById(R.id.info_task)
     }
@@ -43,9 +42,7 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
 ////            return tasksList.value!!.size
 ////        return 0
 //
-//        if(tasksList != null)
-//            return tasksList.value!!.size
-//        return 0
+//        return tasksList.coun
 //    }
 
     // Связывает данные с элементом ViewHolder
@@ -56,6 +53,7 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
         // Устанавливаем текст и состояние флажка CheckBox на основе данных задачи
         holder.checkBox.text = todoItem.checkBoxTaskText
         holder.checkBox.isChecked = todoItem.isCompleted
+
         // Проверяем важность задачи и обновляем внешний вид CheckBox в соответствии с состоянием и важностью
         val importanceHigh: Boolean = todoItem.importance == "Высокий"
         updateTask(holder.checkBox, todoItem.isCompleted, importanceHigh)
@@ -77,10 +75,9 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
 //            // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
 //            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
 //        }
+
         holder.buttonInfo.setOnClickListener {
-//            val transferData: Bundle = Bundle()
             onItemClickListener?.onButtonInfoClick(todoItem)
-            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment)
 //            transferData.putInt("currentModel", position)
             // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
 //            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
@@ -106,6 +103,10 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
             if (isHighImportance) compoundButton.setButtonDrawable(R.drawable.unchecked__red)
             else compoundButton.setButtonDrawable(R.drawable.unchecked_empty)
         }
+    }
+
+    fun getItemByPosition(position: Int): TodoItemEntity {
+        return getItem(position)
     }
 
     // Метод устанавливает слушатель OnItemClickListener для обработки кликов на элементах списка задач
