@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 
 open class TaskViewModel: ViewModel() {
     private val todoItemsRepository: TodoItemsRepository by locateLazy()
-    private val tasks = todoItemsRepository.getAllTasks().asLiveDataFlow()
+    private var tasks = todoItemsRepository.getAllTasks().asLiveDataFlow()
     private lateinit var completedTasksCount: LiveData<Int>
 //    private val uncompletedTasks = todoItemsRepository.getUncompletedTasks().asLiveDataFlow()
 
@@ -86,5 +86,13 @@ open class TaskViewModel: ViewModel() {
 
     fun deleteDate() {
         todoItemsRepository.deleteDate()
+    }
+
+    fun hideCompleteTasks() {
+        tasks = todoItemsRepository.getUncompletedTasks().asLiveDataFlow()
+    }
+
+    fun showAllTasks() {
+        tasks = todoItemsRepository.getAllTasks().asLiveDataFlow()
     }
 }

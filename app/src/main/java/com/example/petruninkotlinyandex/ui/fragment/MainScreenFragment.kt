@@ -12,6 +12,7 @@ import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
@@ -25,8 +26,7 @@ import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -36,7 +36,8 @@ class MainScreenFragment : Fragment() {
     private lateinit var tasksRecyclerView: RecyclerView
 //    private val taskViewModel: TaskViewModel by activityViewModels()
     private val taskViewModel = TaskViewModel()
-    private val tasksAdapter = TasksAdapter(taskViewModel.getAllTasks())
+//    private val tasksAdapter = TasksAdapter(taskViewModel.getAllTasks())
+    private val tasksAdapter = TasksAdapter()
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -49,6 +50,12 @@ class MainScreenFragment : Fragment() {
             binding.titleTextCollapsing.text = "Выполнено - ${count.toString()}"
         }
 
+        lifecycleScope.launch {
+            taskViewModel.getAllTasks().collect { yourList ->
+                tasksAdapter.submitList(yourList)
+            }
+        }
+
         return binding.root
     }
 
@@ -56,6 +63,24 @@ class MainScreenFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         taskViewModel.getAllTasks().onEach(::renderTasks).launchIn(lifecycleScope)
+
+//        lifecycleScope.launch {
+//            taskViewModel.getAllTasks().collect { list ->
+//                // Обновите адаптер списка с новым списком 'list'
+//                tasksAdapter.updateList(list)
+//            }
+//        }
+
+
+
+//        taskViewModel.getAllTasks()
+//            .onEach { taskList ->
+//                // Обновить список задач в адаптере
+//                tasksAdapter.submitList(taskList)
+//            }
+//            .launchIn(lifecycleScope)
+
+
 
         tasksRecyclerView =  binding.recyclerTasks
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
@@ -115,20 +140,20 @@ class MainScreenFragment : Fragment() {
         else binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility_off))
 
         // Обработчик нажатия на кнопку скрытия выполненных задач
-//        binding.eyeButton.setOnClickListener {
-//            // Если кнопка не была нажата, то скрыть выполненные задачи и изменить иконку
-//            if (taskViewModel.getEyeVisibility()) {
-//                binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility_off))
-//                taskViewModel.hideCompleteTasks()
-//                taskViewModel.setEyeVisibility(false)
-//            }
-//            // Если кнопка была нажата, то показать все задачи и изменить иконку
-//            else {
-//                binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
-//                taskViewModel.showAllTasks()
-//                taskViewModel.setEyeVisibility(true)
-//            }
-//        }
+        binding.eyeButton.setOnClickListener {
+            // Если кнопка не была нажата, то скрыть выполненные задачи и изменить иконку
+            if (taskViewModel.getEyeVisibility()) {
+                binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility_off))
+                taskViewModel.hideCompleteTasks()
+                taskViewModel.setEyeVisibility(false)
+            }
+            // Если кнопка была нажата, то показать все задачи и изменить иконку
+            else {
+                binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
+                taskViewModel.showAllTasks()
+                taskViewModel.setEyeVisibility(true)
+            }
+        }
 
         swipeToGesture(tasksRecyclerView)
     }

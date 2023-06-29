@@ -25,6 +25,8 @@ class TodoItemsRepository(private val todoItemDatabase: TodoItemDatabase) {
     // Состояние нажатия кнопки, скрывающей выполненные задачи
     private var eyeIsVisibility = true
 
+//    private var tasks: Flow<List<TodoItemEntity>> = todoItemDao.getAllTasks()
+
     // Счетчик выполненных задач
 //    private var counterCompleteTasks = 0
 
@@ -32,7 +34,8 @@ class TodoItemsRepository(private val todoItemDatabase: TodoItemDatabase) {
 //    private val flowOfItems: Flow<List<TodoItemEntity>> = todoItemDao.getAllTasks()
 //    private lateinit var itemList: List<TodoItemEntity>
 
-//    fun getUncompletedTasks(): Flow<List<TodoItemEntity>> = todoItemDao.getUncompletedTasks()
+    fun getUncompletedTasks(): Flow<List<TodoItemEntity>> = todoItemDao.getUncompletedTasks()
+//    fun getAllTasks(): Flow<List<TodoItemEntity>> = todoItemDao.getAllTasks()
     fun getAllTasks(): Flow<List<TodoItemEntity>> = todoItemDao.getAllTasks()
     fun getCountCompleted(): LiveData<Int> {
         return todoItemDao.getCountCompleted()
@@ -113,13 +116,14 @@ class TodoItemsRepository(private val todoItemDatabase: TodoItemDatabase) {
 
     // Скрытие завершенных задач
 //    fun hideCompleteTasks() {
-//        tasks.value = todoItemsRepository.getTasks().value?.filter { !it.isCompleted}
+//        tasks = todoItemDao.getUncompletedTasks()
+////        tasks.value = todoItemsRepository.getTasks().value?.filter { !it.isCompleted}
 //    }
 
     // Показ всех задач
-//    fun showAllTasks() {
+    fun showAllTasks() {
 //        tasks.value = todoItemsRepository.getAllTasks().value
-//    }
+    }
 
     // Получение состояния нажатия кнопки, скрывающей выполненные задачи
     fun getEyeVisibility(): Boolean {

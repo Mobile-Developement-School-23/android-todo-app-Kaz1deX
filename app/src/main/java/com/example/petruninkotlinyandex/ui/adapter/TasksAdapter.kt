@@ -19,10 +19,10 @@ import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharedFlow
 
-class TasksAdapter(private val tasksList: SharedFlow<List<TodoItemEntity>>): ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
+//class TasksAdapter(private val tasksList: SharedFlow<List<TodoItemEntity>>): ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
+class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
 //    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
-    private var onItemInfoClickListener: OnItemClickListener? = null
 
     // ViewHolder для элементов списка задач в RecyclerView
     class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
@@ -35,15 +35,6 @@ class TasksAdapter(private val tasksList: SharedFlow<List<TodoItemEntity>>): Lis
         val layoutInflater = LayoutInflater.from(parent.context)
         return TasksViewHolder(layoutInflater.inflate(R.layout.item_list, parent, false))
     }
-
-    // Возвращает общее количество элементов в списке задач
-//    override fun getItemCount(): Int {
-////        if(tasksList.value != null)
-////            return tasksList.value!!.size
-////        return 0
-//
-//        return tasksList.coun
-//    }
 
     // Связывает данные с элементом ViewHolder
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
