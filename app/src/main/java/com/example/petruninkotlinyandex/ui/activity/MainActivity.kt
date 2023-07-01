@@ -1,7 +1,5 @@
 package com.example.petruninkotlinyandex.ui.activity
 
-import android.content.Context
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.petruninkotlinyandex.databinding.ActivityMainBinding

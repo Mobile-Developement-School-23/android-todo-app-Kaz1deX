@@ -4,6 +4,7 @@ import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 
 object MapperTodoItem {
+    // Преобразование модели в сущность
     fun modelToEntity(todoItem: TodoItem): TodoItemEntity =
         TodoItemEntity(
             idTask = todoItem.idTask,
@@ -14,6 +15,7 @@ object MapperTodoItem {
             isCompleted = todoItem.isCompleted
         )
 
+    // Преобразование сущности в модель
     fun entityToModel(todoItemEntity: TodoItemEntity) =
         TodoItem(
             idTask = todoItemEntity.idTask,

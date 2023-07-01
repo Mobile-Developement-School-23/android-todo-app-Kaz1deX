@@ -15,20 +15,15 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.ui.viewModel.TaskViewModel
-import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentAddTaskBinding
-import kotlinx.coroutines.cancel
 import java.util.*
 
 // Фрагмент добавления или редактирования задач
 class AddTaskFragment : Fragment() {
     private var _binding: FragmentAddTaskBinding? = null
     private val binding get() = _binding!!
-//    private val taskViewModel: TaskViewModel by viewModels()
-//    private val taskViewModel: TaskViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
-//    private val currentId = taskViewModel.getCurrentId()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,10 +35,6 @@ class AddTaskFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // Получаем позицию задачи из переданных аргументов
-//        val positionTask = arguments?.getInt("currentModel") ?: -1
-        // Установка текущей задачи
-//        if (positionTask != -1) taskViewModel.setCurrentTask(taskViewModel.getTaskByPosition(positionTask))
 
         // Обработчик нажатия на кнопку закрытия
         binding.toolbarButtonClose.setOnClickListener {
@@ -57,6 +48,7 @@ class AddTaskFragment : Fragment() {
 
         // Сохранение изменений задачи
         saveChangesTask(view)
+
         // Загрузка ранее сохраненной задачи
         pastTask()
 
@@ -69,13 +61,14 @@ class AddTaskFragment : Fragment() {
         else {
             // Обработчик нажатия на кнопку удаления задачи
             binding.deleteText.setOnClickListener {
-//                taskViewModel.getCurrentTask()?.let { itt -> taskViewModel.deleteTaskFromRepository(itt) }
                 taskViewModel.getCurrentTask()?.let { itt -> taskViewModel.delete(itt) }
                 view?.findNavController()?.navigateUp()
             }
         }
 
-        val months = arrayOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа", "сентября", "октября", "ноября", "декабря")
+        val months = arrayOf("января", "февраля", "марта","апреля",
+            "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря")
 
         // Обработчик переключения даты
         binding.switchDate.setOnClickListener {
@@ -109,22 +102,18 @@ class AddTaskFragment : Fragment() {
             // Условие, чтобы не записывать пустую задачу
             if (binding.newTextTask.text.isNotEmpty()) {
                 var importance = binding.textImportance.text.toString()
+
                 // Убрать восклицательные знаки у важности
                 if(importance == "!!Высокий") importance = importance.drop(2)
 
                 // Проверка на то, что задача создается, а не редактируется
                 if(taskViewModel.getCurrentTask() == null){
-//                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
                     taskViewModel.insert(
                         TodoItem(checkBoxTaskText = binding.newTextTask.text.toString(), importance = importance, currentDate = binding.dateText.text.toString())
                     )
                 }
                 // Если редактируется, то изменить данные уже существующей задачи
                 else{
-//                    taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
-//                    taskViewModel.getCurrentTask()?.importance = importance
-//                    taskViewModel.getCurrentTask()?.deadlineDate = binding.dateText.text.toString()
-
                     val newTodoItem = taskViewModel.getCurrentTask()
                     if (newTodoItem != null) {
                         newTodoItem.checkBoxTaskText = binding.newTextTask.text.toString()
@@ -172,8 +161,8 @@ class AddTaskFragment : Fragment() {
         val popupMenu = PopupMenu(context, view)
         popupMenu.menuInflater.inflate(R.menu.importance_menu, popupMenu.menu)
 
-        var highImportance = popupMenu.menu.getItem(2)
-        var spannable: SpannableString = SpannableString(highImportance.title.toString())
+        val highImportance = popupMenu.menu.getItem(2)
+        val spannable: SpannableString = SpannableString(highImportance.title.toString())
         spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(view.context, R.color.color_red)), 0, spannable.length, 0)
         highImportance.title = spannable
 

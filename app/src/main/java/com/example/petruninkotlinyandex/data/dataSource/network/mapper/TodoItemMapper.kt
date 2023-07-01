@@ -4,6 +4,7 @@ import com.example.petruninkotlinyandex.data.dataSource.network.entities.TodoIte
 import com.example.petruninkotlinyandex.data.model.TodoItem
 
 object TodoItemMapper {
+    // Преобразование модели в сущность для работы с сетью
     fun modelToEntity(todoItem: TodoItem) =
         TodoItemNetworkEntity(
             id = todoItem.idTask.toString(),
@@ -15,6 +16,7 @@ object TodoItemMapper {
             changedAt = todoItem.changingDate
         )
 
+    // Преобразование сущности в модель
     fun entityToModel(todoItemNetworkEntity: TodoItemNetworkEntity) =
         TodoItem(
             idTask = todoItemNetworkEntity.id.toInt(),

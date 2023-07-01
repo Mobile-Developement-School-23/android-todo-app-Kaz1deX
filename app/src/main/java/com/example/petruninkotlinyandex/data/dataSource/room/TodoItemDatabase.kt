@@ -9,6 +9,7 @@ import androidx.room.RoomDatabase
 abstract class TodoItemDatabase: RoomDatabase() {
     abstract val todoItemDao: TodoItemDao
     companion object {
+        // Создание экземпляра базы данных
         fun create(context: Context) = Room
             .databaseBuilder(
                 context,

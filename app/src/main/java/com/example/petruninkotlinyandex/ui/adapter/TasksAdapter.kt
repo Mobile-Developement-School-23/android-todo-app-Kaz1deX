@@ -12,15 +12,11 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 
-//class TasksAdapter(private val tasksList: SharedFlow<List<TodoItemEntity>>): ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
 class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
-//    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
 
-    // ViewHolder для элементов списка задач в RecyclerView
     class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
         var checkBox: CheckBox = itemView.findViewById(R.id.checkBox_task)
         var buttonInfo: ImageView = itemView.findViewById(R.id.info_task)
@@ -34,7 +30,6 @@ class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiff
 
     // Связывает данные с элементом ViewHolder
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
-//        val todoItem: TodoItemEntity = tasksList.value?.get(position) ?: return
         val todoItem = getItem(position)
 
         // Устанавливаем текст и состояние флажка CheckBox на основе данных задачи
@@ -55,19 +50,8 @@ class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiff
             }
         }
 
-        // Устанавливаем слушатель клика для элемента списка задач
-//        holder.itemView.setOnClickListener {
-//            val transferData: Bundle = Bundle()
-//            transferData.putInt("currentModel", position)
-//            // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
-//            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
-//        }
-
         holder.buttonInfo.setOnClickListener {
             onItemClickListener?.onButtonInfoClick(todoItem)
-//            transferData.putInt("currentModel", position)
-            // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
-//            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
         }
     }
 
@@ -77,6 +61,7 @@ class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiff
         if (newStatus) {
             // Зачеркивание текста при выполнении задачи
             compoundButton.paintFlags = compoundButton.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
             // Установка иконки выполненной задачи
             compoundButton.setButtonDrawable(R.drawable.checked)
         }
@@ -92,6 +77,7 @@ class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiff
         }
     }
 
+    // Получить задачу по её положению в списке
     fun getItemByPosition(position: Int): TodoItem {
         return getItem(position)
     }
@@ -101,15 +87,11 @@ class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiff
         this.onItemClickListener = onItemClickListener
     }
 
-    // Интерфейс определяет метод onItemClick() для обработки кликов на элементах списка задач
+    // Интерфейс определяет методы для обработки кликов на элементах списка задач
     interface OnItemClickListener {
         fun onItemClick(todoItem: TodoItem)
         fun onButtonInfoClick(todoItem: TodoItem)
     }
-
-//    override fun submitList(list: List<TodoItemEntity>?) {
-//        super.submitList(list?.let { ArrayList(it) })
-//    }
 }
 
 class TaskDiffCallback: DiffUtil.ItemCallback<TodoItem>() {

@@ -3,7 +3,6 @@ package com.example.petruninkotlinyandex.ui.fragment
 import com.example.petruninkotlinyandex.ui.gesture.SwipeGesture
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,33 +16,24 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.dataSource.network.entities.TodoItemElementResponse
-import com.example.petruninkotlinyandex.data.dataSource.network.retrofit.RetrofitSource
 import com.example.petruninkotlinyandex.ui.viewModel.TaskViewModel
 import com.example.petruninkotlinyandex.ui.adapter.TasksAdapter
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 // Основной фрагмент со списком задач
 class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private lateinit var tasksRecyclerView: RecyclerView
-//    private val taskViewModel: TaskViewModel by activityViewModels()
     private val taskViewModel: TaskViewModel by activityViewModels()
-//    private val tasksAdapter = TasksAdapter(taskViewModel.getAllTasks())
     private val tasksAdapter = TasksAdapter()
     private val binding get() = _binding!!
-
     private val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
 
-    private val visibility: StateFlow<Boolean> by lazy {
-        taskViewModel.visibility
-    }
+    // Состояние нажатия "глаза"
+    private val visibility: StateFlow<Boolean> by lazy { taskViewModel.visibility }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,11 +41,13 @@ class MainScreenFragment : Fragment() {
     ): View {
         _binding = FragmentMainScreenBinding.inflate(inflater, container, false)
 
+        // Подписка на изменение количества выполненных задач
         taskViewModel.getCountCompleted().observe(viewLifecycleOwner) { count ->
             val counterText = resources.getString(R.string.counter_completed_tasks) + " " + count.toString()
             binding.titleTextCollapsing.text = counterText
         }
 
+        // Обновление списка при изменении в зависимости от нажатия "глаза"
         lifecycle.coroutineScope.launch(Dispatchers.IO) {
             visibility.collectLatest { visibilityState ->
                 when(visibilityState) {
@@ -73,93 +65,20 @@ class MainScreenFragment : Fragment() {
             }
         }
 
-//        lifecycleScope.launch {
-//            taskViewModel.getAllTasks().collect { yourList ->
-//                tasksAdapter.submitList(yourList)
-//            }
-//        }
-
-//        val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-//        viewModelScope.launch {
-//            taskViewModel.getAllTasks()
-//                .collectLatest { artists ->
-//                    withContext(Dispatchers.Main) {
-//                        tasksAdapter.submitList(artists)
-//                    }
-//                }
-//        }
-
-//        val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
-//        viewModelScope.launch {
-//            taskViewModel.getAllTasks()
-//                .onEach { artists ->
-//                    withContext(Dispatchers.Main) {
-//                        tasksAdapter.submitList(artists)
-//                    }
-//                }
-//                .collect()
-//        }
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        viewModelScope.launch {
-//            taskViewModel.getAllTasks().collect { artists ->
-//                withContext(Dispatchers.Main) {
-//                    tasksAdapter.submitList(artists.toMutableList())
-//                }
-//            }
-//        }
-
-//        taskViewModel.getAllTasks().onEach(::renderTasks).launchIn(lifecycleScope)
-
-//        lifecycleScope.launch {
-//            taskViewModel.getAllTasks().collect { list ->
-//                // Обновите адаптер списка с новым списком 'list'
-//                tasksAdapter.updateList(list)
-//            }
-//        }
-
-
-
-//        taskViewModel.getAllTasks()
-//            .onEach { taskList ->
-//                // Обновить список задач в адаптере
-//                tasksAdapter.submitList(taskList)
-//            }
-//            .launchIn(lifecycleScope)
-
-
-
         tasksRecyclerView =  binding.recyclerTasks
         val layoutManager = LinearLayoutManager(requireActivity(), LinearLayoutManager.VERTICAL, false)
-        // Обновление счетчика выполненных задач
-//        binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
-//        binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
-
         tasksRecyclerView.adapter = tasksAdapter
-//        tasksAdapter.tasksList = taskViewModel.getTasks()
-//        tasksAdapter.tasksList = taskViewModel.getAllTasks()
         tasksRecyclerView.layoutManager = layoutManager
 
         // Обработчик нажатия на элемент списка задач
         tasksAdapter.setOnClickListener(object: TasksAdapter.OnItemClickListener {
-            override fun onItemClick(todoItem: TodoItem) {
-                // Если задача из выполненной стала невыполненной
-//                if (!todoItem.isCompleted) taskViewModel.minusCounterCompleteTasks()
-//                // Если задача из невыполненной стала выполненной
-//                else taskViewModel.plusCounterCompleteTasks()
-
-                // Скрывать выполненную задачу, если кнопка скрытия выполненных задач активна
-//                if (!taskViewModel.getEyeVisibility()) taskViewModel.hideCompleteTasks()
-                // Обновление счетчика выполненных задач
-//                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
-//                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
-                taskViewModel.updateTask(todoItem)
-            }
+            override fun onItemClick(todoItem: TodoItem) { taskViewModel.updateTask(todoItem) }
 
             override fun onButtonInfoClick(todoItem: TodoItem) {
                 taskViewModel.setCurrentTask(todoItem)
@@ -175,17 +94,9 @@ class MainScreenFragment : Fragment() {
             Navigation.findNavController(view).navigate(R.id.action_mainScreenFragment_to_addTaskFragment)
         }
 
-        // Установка наблюдателя для обновления списка при изменении
-//        taskViewModel.getTasks().observe(viewLifecycleOwner, Observer { it?.let {
-//            tasksAdapter?.notifyDataSetChanged()
-//        } })
-
         binding.swipeRefreshLayoutMainScreen.setOnRefreshListener {
-//            binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
             binding.swipeRefreshLayoutMainScreen.isRefreshing = false
         }
-
-
 
         // Установка корректной иконки при создании фрагмента
         if (taskViewModel.getEyeVisibility()) binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
@@ -218,15 +129,10 @@ class MainScreenFragment : Fragment() {
                 try{
                     when(direction){
                         ItemTouchHelper.LEFT->{
-//                            val deleteItem = taskViewModel.getTaskByIndex(position)
                             val deleteItem = tasksAdapter.getItemByPosition(position)
                             if (deleteItem != null) {
                                 // Удаление задачи из списка после свайпа
-//                                taskViewModel.deleteTaskFromRepository(deleteItem)
                                 taskViewModel.delete(deleteItem)
-                                // Обновление счетчика выполненных задач
-//                                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCounterCompleteTasks()}"
-//                                binding.titleTextCollapsing.text = "Выполнено - ${taskViewModel.getCountCompleted()}"
                             }
                         }
                     }
@@ -241,10 +147,6 @@ class MainScreenFragment : Fragment() {
         val touchHelper = ItemTouchHelper(swipeGesture)
         touchHelper.attachToRecyclerView(itemRecyclerView)
     }
-
-//    private fun renderTasks(tasks: List<TodoItemEntity>) {
-//        tasksAdapter.submitList(tasks)
-//    }
 
     override fun onDestroyView() {
         super.onDestroyView()

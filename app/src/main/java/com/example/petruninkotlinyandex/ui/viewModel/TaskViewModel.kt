@@ -3,7 +3,6 @@ package com.example.petruninkotlinyandex.ui.viewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.data.repository.TodoItemsRepository
 import com.example.petruninkotlinyandex.locateLazy
@@ -12,88 +11,77 @@ import kotlinx.coroutines.launch
 
 open class TaskViewModel: ViewModel() {
     private val todoItemsRepository: TodoItemsRepository by locateLazy()
-    private var currentTask: TodoItem? = null
-    private lateinit var completedTasksCount: LiveData<Int>
-    // Текущая задача, с которой необходимо работать
 
+    // Текущая задача, с которой необходимо работать
+    private var currentTask: TodoItem? = null
+
+    // Количество выполненных задач
+    private lateinit var completedTasksCount: LiveData<Int>
+
+    // Состояние нажатия кнопки, скрывающей выполненные задачи
+    private var eyeIsVisibility = true
+
+    // Состояние показа невыполненных задач
     private val _visibility: MutableStateFlow<Boolean> = MutableStateFlow(true)
+
+
     val visibility: StateFlow<Boolean>
         get() = _visibility
 
+    // Переключение состояния "глаза"
     fun invertVisibilityState() {
         _visibility.value = _visibility.value.not()
     }
-//    private val uncompletedTasks = todoItemsRepository.getUncompletedTasks().asLiveDataFlow()
 
-//    private fun <T> Flow<T>.asLiveDataFlow() = shareIn(viewModelScope, SharingStarted.Eagerly, replay = 1)
-
-    // Добавление задачи в репозиторий
+    // Добавление задачи
     fun insert(todoItem: TodoItem) {
         viewModelScope.launch {
             todoItemsRepository.insert(todoItem)
         }
     }
 
+    // Обновление задачи
     fun updateTask(todoItem: TodoItem) {
         viewModelScope.launch {
             todoItemsRepository.updateTask(todoItem)
         }
     }
 
+    // Получение количества выполненных задач
     fun getCountCompleted(): LiveData<Int> {
         return todoItemsRepository.getCountCompleted()
     }
 
-//    fun getCountCompleted(): LiveData<Int> {
-//        getCountCompletedThis()
-//        return completedTasksCount
-//    }
-//
-//    private fun getCountCompletedThis() {
-//        viewModelScope.launch {
-//            completedTasksCount = todoItemsRepository.getCountCompleted()
-//        }
-//    }
-
+    // Удалить задачу
     fun delete(todoItem: TodoItem) {
         viewModelScope.launch {
             todoItemsRepository.delete(todoItem)
         }
     }
 
+    // Получить все задачи
     fun getAllTasks(): Flow<List<TodoItem>> = todoItemsRepository.getAllTasks()
+
+    // Получить только невыполненные задачи
     fun getUncompletedTasks(): Flow<List<TodoItem>> = todoItemsRepository.getUncompletedTasks()
 
-//    fun getUncompletedTasks() = uncompletedTasks
-
-//    fun plusCounterCompleteTasks() {
-//        todoItemsRepository.plusCounterCompleteTasks()
-//    }
-//
-//    fun minusCounterCompleteTasks() {
-//        todoItemsRepository.minusCounterCompleteTasks()
-//    }
-//
-//    fun getCounterCompleteTasks() = todoItemsRepository.getCounterCompleteTasks()
-
+    // Установить состояние "глаза"
     fun setEyeVisibility(visibility: Boolean) {
-        todoItemsRepository.setEyeVisibility(visibility)
+        eyeIsVisibility = visibility
     }
 
-    fun getEyeVisibility() = todoItemsRepository.getEyeVisibility()
+    // Получить состояние "глаза"
+    fun getEyeVisibility() = eyeIsVisibility
 
+    // Установить текущую задачу
     fun setCurrentTask(todoItem: TodoItem) {
         currentTask = todoItem
     }
 
-//    fun getTaskById(idTask: Int): TodoItem {
-//        viewModelScope.launch {
-//            currentTask = todoItemsRepository.getTaskById(idTask)
-//        }
-//    }
-
+    // Получить текущую задачу
     fun getCurrentTask() = currentTask
 
+    // Очистить текущую задачу
     fun clearCurrentTask() {
         currentTask = null
     }
@@ -101,7 +89,6 @@ open class TaskViewModel: ViewModel() {
     // Удаление даты дедлайна
     fun deleteDate() {
         viewModelScope.launch {
-//            val newTask = todoItemsRepository.getTaskById(currentIdTask)
             val newTask = currentTask
             if (newTask != null) {
                 newTask.deadlineDate = ""
@@ -109,12 +96,4 @@ open class TaskViewModel: ViewModel() {
             }
         }
     }
-
-//    fun hideCompleteTasks() {
-//        tasks = todoItemsRepository.getUncompletedTasks().asLiveDataFlow()
-//    }
-//
-//    fun showAllTasks() {
-//        tasks = todoItemsRepository.getAllTasks().asLiveDataFlow()
-//    }
 }

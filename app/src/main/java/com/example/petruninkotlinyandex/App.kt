@@ -6,6 +6,7 @@ import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemDatabase
 import com.example.petruninkotlinyandex.data.repository.TodoItemsRepository
 import kotlin.reflect.KClass
 
+// Инициализации сервиса
 class App: Application() {
     override fun onCreate() {
         super.onCreate()
