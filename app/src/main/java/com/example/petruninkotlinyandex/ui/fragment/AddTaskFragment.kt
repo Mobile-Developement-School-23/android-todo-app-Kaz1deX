@@ -10,15 +10,15 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.petruninkotlinyandex.R
 import com.example.petruninkotlinyandex.ui.viewModel.TaskViewModel
-import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
+import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
+import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentAddTaskBinding
+import kotlinx.coroutines.cancel
 import java.util.*
 
 // Фрагмент добавления или редактирования задач
@@ -27,7 +27,8 @@ class AddTaskFragment : Fragment() {
     private val binding get() = _binding!!
 //    private val taskViewModel: TaskViewModel by viewModels()
 //    private val taskViewModel: TaskViewModel by activityViewModels()
-    private val taskViewModel = TaskViewModel()
+    private val taskViewModel: TaskViewModel by activityViewModels()
+//    private val currentId = taskViewModel.getCurrentId()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -114,19 +115,28 @@ class AddTaskFragment : Fragment() {
                 // Проверка на то, что задача создается, а не редактируется
                 if(taskViewModel.getCurrentTask() == null){
 //                    taskViewModel.addTaskToRepository(TodoItem(binding.newTextTask.text.toString(), importance, binding.dateText.text.toString()))
-                    taskViewModel.insert(TodoItemEntity(checkBoxTaskText = binding.newTextTask.text.toString(),
-                        importance = importance, currentDate = binding.dateText.text.toString()))
+                    taskViewModel.insert(
+                        TodoItem(checkBoxTaskText = binding.newTextTask.text.toString(), importance = importance, currentDate = binding.dateText.text.toString())
+                    )
                 }
                 // Если редактируется, то изменить данные уже существующей задачи
                 else{
-                    taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
-                    taskViewModel.getCurrentTask()?.importance = importance
-                    taskViewModel.getCurrentTask()?.deadlineDate = binding.dateText.text.toString()
+//                    taskViewModel.getCurrentTask()?.checkBoxTaskText = binding.newTextTask.text.toString()
+//                    taskViewModel.getCurrentTask()?.importance = importance
+//                    taskViewModel.getCurrentTask()?.deadlineDate = binding.dateText.text.toString()
+
+                    val newTodoItem = taskViewModel.getCurrentTask()
+                    if (newTodoItem != null) {
+                        newTodoItem.checkBoxTaskText = binding.newTextTask.text.toString()
+                        newTodoItem.importance = importance
+                        newTodoItem.deadlineDate = binding.dateText.text.toString()
+                        taskViewModel.updateTask(newTodoItem)
+                    }
                 }
                 view?.findNavController()?.navigateUp()
             }
             else {
-                binding.newTextTask.hint = "Необходимо ввести задачу"
+                binding.newTextTask.hint = resources.getString(R.string.edit_text_hint)
             }
         }
     }
@@ -137,7 +147,6 @@ class AddTaskFragment : Fragment() {
         val todoItem = taskViewModel.getCurrentTask() ?: return
         var importanceTask = todoItem?.importance
         binding.newTextTask.setText(todoItem?.checkBoxTaskText)
-//        Toast.makeText(requireActivity(), "OKOKOKO", Toast.LENGTH_LONG).show()
 
         // Подстановка важности задачи
         if(importanceTask.equals("Высокий")) {

@@ -1,7 +1,6 @@
 package com.example.petruninkotlinyandex.ui.adapter
 
 import android.graphics.Paint
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,18 +8,15 @@ import android.widget.CheckBox
 import android.widget.CompoundButton
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.Navigation
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.SharedFlow
+import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
+import com.example.petruninkotlinyandex.data.model.TodoItem
 
 //class TasksAdapter(private val tasksList: SharedFlow<List<TodoItemEntity>>): ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
-class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
+class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
 //    lateinit var tasksList: MutableLiveData<List<TodoItemEntity>>
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -96,7 +92,7 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
         }
     }
 
-    fun getItemByPosition(position: Int): TodoItemEntity {
+    fun getItemByPosition(position: Int): TodoItem {
         return getItem(position)
     }
 
@@ -107,12 +103,16 @@ class TasksAdapter: ListAdapter<TodoItemEntity, TasksAdapter.TasksViewHolder>(Ta
 
     // Интерфейс определяет метод onItemClick() для обработки кликов на элементах списка задач
     interface OnItemClickListener {
-        fun onItemClick(todoItem: TodoItemEntity)
-        fun onButtonInfoClick(todoItem: TodoItemEntity)
+        fun onItemClick(todoItem: TodoItem)
+        fun onButtonInfoClick(todoItem: TodoItem)
     }
+
+//    override fun submitList(list: List<TodoItemEntity>?) {
+//        super.submitList(list?.let { ArrayList(it) })
+//    }
 }
 
-class TaskDiffCallback: DiffUtil.ItemCallback<TodoItemEntity>() {
-    override fun areItemsTheSame(oldItem: TodoItemEntity, newItem: TodoItemEntity): Boolean = oldItem.idTask == newItem.idTask
-    override fun areContentsTheSame(oldItem: TodoItemEntity, newItem: TodoItemEntity): Boolean = oldItem == newItem
+class TaskDiffCallback: DiffUtil.ItemCallback<TodoItem>() {
+    override fun areItemsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean = oldItem.idTask == newItem.idTask
+    override fun areContentsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean = oldItem == newItem
 }

@@ -35,9 +35,9 @@
             android:id="@+id/toolbar_button_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginRight="15dp"
-            android:text="СОХРАНИТЬ"
+            android:layout_gravity="end"
+            android:layout_marginEnd="15dp"
+            android:text="@string/save_task"
             android:textColor="@color/color_blue"
             android:textSize="16sp"
             app:fontFamily="@font/roboto_medium"
@@ -59,7 +59,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/back_primary"
             android:orientation="vertical">
 
@@ -85,15 +85,18 @@
                         android:layout_height="match_parent"
                         android:backgroundTint="@color/back_secondary"
                         android:gravity="start"
-                        android:hint="Что надо сделать..."
+                        android:hint="@string/test_text"
                         android:minLines="5"
                         android:paddingStart="15dp"
+                        android:paddingEnd="15dp"
                         android:textColor="@color/label_primary"
                         android:textColorHint="@color/label_tertiary"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toTopOf="parent"
+                        android:inputType="textMultiLine"
+                        android:importantForAutofill="no" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -104,7 +107,7 @@
                 style="@style/item_title"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:background="#00000000"
                 android:fontFamily="@font/roboto"
                 android:gravity="bottom"
@@ -112,7 +115,7 @@
                 android:paddingTop="0dp"
                 android:paddingRight="0dp"
                 android:paddingBottom="0dp"
-                android:text="Важность"
+                android:text="@string/importance_label_text"
                 android:textAllCaps="false"
                 android:textColor="@color/label_primary" />
 
@@ -120,9 +123,9 @@
                 android:id="@+id/text_importance"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:fontFamily="@font/roboto"
-                android:text="Нет"
+                android:text="@string/importance_text"
                 android:textColor="@color/label_tertiary" />
 
             <View
@@ -137,15 +140,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_importance" />
 
-            <Switch
+            <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/switch_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="5dp"
-                android:text="Сделать до"
+                android:layout_marginEnd="5dp"
+                android:text="@string/date_title_text"
                 android:textColor="@color/label_primary"
                 android:textSize="16sp" />
 
@@ -174,14 +177,14 @@
                 android:id="@+id/delete_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="50dp"
-                android:drawableStart="@drawable/delete_red"
                 android:drawablePadding="20dp"
                 android:fontFamily="@font/roboto"
-                android:text="Удалить"
-                android:textColor="@color/color_red" />
+                android:text="@string/delete_text"
+                android:textColor="@color/color_red"
+                app:drawableStartCompat="@drawable/delete_red" />
 
         </LinearLayout>
     </ScrollView>

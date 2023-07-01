@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.data.dataBase
+package com.example.petruninkotlinyandex.data.dataSource.room
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
@@ -23,4 +23,7 @@ interface TodoItemDao {
 
     @Update
     suspend fun updateTask(todoItem: TodoItemEntity)
+
+    @Query("SELECT * FROM task_table WHERE idTask = :id")
+    suspend fun getTaskById(id: Int): TodoItemEntity?
 }

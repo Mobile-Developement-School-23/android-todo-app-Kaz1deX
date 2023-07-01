@@ -1,7 +1,7 @@
 package com.example.petruninkotlinyandex.ui.adapter
 
 import androidx.recyclerview.widget.DiffUtil
-import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
+import com.example.petruninkotlinyandex.data.dataSource.room.TodoItemEntity
 
 // Дополнительное задание (использовать не удалось)
 class DiffUtilTasks(

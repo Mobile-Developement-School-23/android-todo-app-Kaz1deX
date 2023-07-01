@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.data.dataBase
+package com.example.petruninkotlinyandex.data.dataSource.room
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
@@ -12,4 +12,5 @@ data class TodoItemEntity(
     @ColumnInfo(name = "importance") var importance: String,           // Важность задачи
     @ColumnInfo(name = "currentDate") var currentDate: String = "",  // Дата создания задачи
     @ColumnInfo(name = "deadlineDate") var deadlineDate: String = "",    // Дата крайнего срока выполнения задачи
-    @ColumnInfo(name = "isCompleted") var isCompleted: Boolean = false) {} // Флаг, указывающий, завершена ли задача
+    @ColumnInfo(name = "isCompleted") var isCompleted: Boolean = false,
+    @ColumnInfo(name = "changingDate") var changingDate: String = "") {} // Флаг, указывающий, завершена ли задача

@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.data.dataBase
+package com.example.petruninkotlinyandex.data.dataSource.room
 
 import android.content.Context
 import androidx.room.Database

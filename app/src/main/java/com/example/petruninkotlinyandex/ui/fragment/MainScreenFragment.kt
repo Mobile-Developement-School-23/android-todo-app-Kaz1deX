@@ -11,34 +11,39 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.coroutineScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
+import com.example.petruninkotlinyandex.data.dataSource.network.entities.TodoItemElementResponse
+import com.example.petruninkotlinyandex.data.dataSource.network.retrofit.RetrofitSource
 import com.example.petruninkotlinyandex.ui.viewModel.TaskViewModel
 import com.example.petruninkotlinyandex.ui.adapter.TasksAdapter
-import com.example.petruninkotlinyandex.data.dataBase.TodoItemEntity
 import com.example.petruninkotlinyandex.data.model.TodoItem
 import com.example.petruninkotlinyandex.databinding.FragmentMainScreenBinding
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 // Основной фрагмент со списком задач
 class MainScreenFragment : Fragment() {
     private var _binding: FragmentMainScreenBinding? = null
     private lateinit var tasksRecyclerView: RecyclerView
 //    private val taskViewModel: TaskViewModel by activityViewModels()
-    private val taskViewModel = TaskViewModel()
+    private val taskViewModel: TaskViewModel by activityViewModels()
 //    private val tasksAdapter = TasksAdapter(taskViewModel.getAllTasks())
     private val tasksAdapter = TasksAdapter()
     private val binding get() = _binding!!
+
+    private val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+
+    private val visibility: StateFlow<Boolean> by lazy {
+        taskViewModel.visibility
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,14 +52,53 @@ class MainScreenFragment : Fragment() {
         _binding = FragmentMainScreenBinding.inflate(inflater, container, false)
 
         taskViewModel.getCountCompleted().observe(viewLifecycleOwner) { count ->
-            binding.titleTextCollapsing.text = "Выполнено - ${count.toString()}"
+            val counterText = resources.getString(R.string.counter_completed_tasks) + " " + count.toString()
+            binding.titleTextCollapsing.text = counterText
         }
 
-        lifecycleScope.launch {
-            taskViewModel.getAllTasks().collect { yourList ->
-                tasksAdapter.submitList(yourList)
+        lifecycle.coroutineScope.launch(Dispatchers.IO) {
+            visibility.collectLatest { visibilityState ->
+                when(visibilityState) {
+                    true -> {
+                        taskViewModel.getAllTasks().collectLatest { task ->
+                            tasksAdapter.submitList(task)
+                        }
+                    }
+                    false -> {
+                        taskViewModel.getUncompletedTasks().collectLatest { task ->
+                            tasksAdapter.submitList(task)
+                        }
+                    }
+                }
             }
         }
+
+//        lifecycleScope.launch {
+//            taskViewModel.getAllTasks().collect { yourList ->
+//                tasksAdapter.submitList(yourList)
+//            }
+//        }
+
+//        val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+//        viewModelScope.launch {
+//            taskViewModel.getAllTasks()
+//                .collectLatest { artists ->
+//                    withContext(Dispatchers.Main) {
+//                        tasksAdapter.submitList(artists)
+//                    }
+//                }
+//        }
+
+//        val viewModelScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+//        viewModelScope.launch {
+//            taskViewModel.getAllTasks()
+//                .onEach { artists ->
+//                    withContext(Dispatchers.Main) {
+//                        tasksAdapter.submitList(artists)
+//                    }
+//                }
+//                .collect()
+//        }
 
         return binding.root
     }
@@ -62,7 +106,15 @@ class MainScreenFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        taskViewModel.getAllTasks().onEach(::renderTasks).launchIn(lifecycleScope)
+//        viewModelScope.launch {
+//            taskViewModel.getAllTasks().collect { artists ->
+//                withContext(Dispatchers.Main) {
+//                    tasksAdapter.submitList(artists.toMutableList())
+//                }
+//            }
+//        }
+
+//        taskViewModel.getAllTasks().onEach(::renderTasks).launchIn(lifecycleScope)
 
 //        lifecycleScope.launch {
 //            taskViewModel.getAllTasks().collect { list ->
@@ -95,7 +147,7 @@ class MainScreenFragment : Fragment() {
 
         // Обработчик нажатия на элемент списка задач
         tasksAdapter.setOnClickListener(object: TasksAdapter.OnItemClickListener {
-            override fun onItemClick(todoItem: TodoItemEntity) {
+            override fun onItemClick(todoItem: TodoItem) {
                 // Если задача из выполненной стала невыполненной
 //                if (!todoItem.isCompleted) taskViewModel.minusCounterCompleteTasks()
 //                // Если задача из невыполненной стала выполненной
@@ -109,7 +161,7 @@ class MainScreenFragment : Fragment() {
                 taskViewModel.updateTask(todoItem)
             }
 
-            override fun onButtonInfoClick(todoItem: TodoItemEntity) {
+            override fun onButtonInfoClick(todoItem: TodoItem) {
                 taskViewModel.setCurrentTask(todoItem)
                 Navigation.findNavController(view).navigate(R.id.action_mainScreenFragment_to_addTaskFragment)
             }
@@ -142,15 +194,15 @@ class MainScreenFragment : Fragment() {
         // Обработчик нажатия на кнопку скрытия выполненных задач
         binding.eyeButton.setOnClickListener {
             // Если кнопка не была нажата, то скрыть выполненные задачи и изменить иконку
-            if (taskViewModel.getEyeVisibility()) {
+            if (taskViewModel.visibility.value) {
                 binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility_off))
-                taskViewModel.hideCompleteTasks()
+                taskViewModel.invertVisibilityState()
                 taskViewModel.setEyeVisibility(false)
             }
             // Если кнопка была нажата, то показать все задачи и изменить иконку
             else {
                 binding.eyeButton.setImageDrawable(AppCompatResources.getDrawable(requireContext(), R.drawable.visibility))
-                taskViewModel.showAllTasks()
+                taskViewModel.invertVisibilityState()
                 taskViewModel.setEyeVisibility(true)
             }
         }
@@ -190,12 +242,13 @@ class MainScreenFragment : Fragment() {
         touchHelper.attachToRecyclerView(itemRecyclerView)
     }
 
-    private fun renderTasks(tasks: List<TodoItemEntity>) {
-        tasksAdapter.submitList(tasks)
-    }
+//    private fun renderTasks(tasks: List<TodoItemEntity>) {
+//        tasksAdapter.submitList(tasks)
+//    }
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModelScope.cancel()
         _binding = null
     }
 }
