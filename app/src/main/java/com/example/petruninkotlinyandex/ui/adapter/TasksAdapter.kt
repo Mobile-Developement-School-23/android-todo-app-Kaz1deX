@@ -1,27 +1,25 @@
-package com.example.petruninkotlinyandex.adapters
+package com.example.petruninkotlinyandex.ui.adapter
 
 import android.graphics.Paint
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.CompoundButton
+import android.widget.ImageView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.MutableLiveData
-import androidx.navigation.Navigation
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.petruninkotlinyandex.R
-import com.example.petruninkotlinyandex.data.TodoItem
+import com.example.petruninkotlinyandex.data.model.TodoItem
 
-class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
-    lateinit var tasksList: MutableLiveData<List<TodoItem>>
+class TasksAdapter: ListAdapter<TodoItem, TasksAdapter.TasksViewHolder>(TaskDiffCallback()){
     private var onItemClickListener: OnItemClickListener? = null
 
-    // ViewHolder для элементов списка задач в RecyclerView
     class TasksViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        //    private val binding = ItemListBinding.bind(itemView)
         var checkBox: CheckBox = itemView.findViewById(R.id.checkBox_task)
+        var buttonInfo: ImageView = itemView.findViewById(R.id.info_task)
     }
 
     // Вызывается, когда RecyclerView нуждается в новом ViewHolder для отображения элемента
@@ -30,16 +28,9 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
         return TasksViewHolder(layoutInflater.inflate(R.layout.item_list, parent, false))
     }
 
-    // Возвращает общее количество элементов в списке задач
-    override fun getItemCount(): Int {
-        if(tasksList.value != null)
-            return tasksList.value!!.size
-        return 0
-    }
-
     // Связывает данные с элементом ViewHolder
     override fun onBindViewHolder(holder: TasksViewHolder, position: Int) {
-        val todoItem: TodoItem = tasksList.value?.get(position) ?: return
+        val todoItem = getItem(position)
 
         // Устанавливаем текст и состояние флажка CheckBox на основе данных задачи
         holder.checkBox.text = todoItem.checkBoxTaskText
@@ -59,12 +50,8 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
             }
         }
 
-        // Устанавливаем слушатель клика для элемента списка задач
-        holder.itemView.setOnClickListener {
-            val transferData: Bundle = Bundle()
-            transferData.putInt("currentModel", position)
-            // Используем Navigation для перехода к фрагменту AddTaskFragment с передачей данных
-            Navigation.findNavController(it).navigate(R.id.action_mainScreenFragment_to_addTaskFragment, transferData)
+        holder.buttonInfo.setOnClickListener {
+            onItemClickListener?.onButtonInfoClick(todoItem)
         }
     }
 
@@ -74,6 +61,7 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
         if (newStatus) {
             // Зачеркивание текста при выполнении задачи
             compoundButton.paintFlags = compoundButton.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+
             // Установка иконки выполненной задачи
             compoundButton.setButtonDrawable(R.drawable.checked)
         }
@@ -89,13 +77,24 @@ class TasksAdapter: RecyclerView.Adapter<TasksAdapter.TasksViewHolder>(){
         }
     }
 
+    // Получить задачу по её положению в списке
+    fun getItemByPosition(position: Int): TodoItem {
+        return getItem(position)
+    }
+
     // Метод устанавливает слушатель OnItemClickListener для обработки кликов на элементах списка задач
     fun setOnClickListener(onItemClickListener: OnItemClickListener) {
         this.onItemClickListener = onItemClickListener
     }
 
-    // Интерфейс определяет метод onItemClick() для обработки кликов на элементах списка задач
+    // Интерфейс определяет методы для обработки кликов на элементах списка задач
     interface OnItemClickListener {
         fun onItemClick(todoItem: TodoItem)
+        fun onButtonInfoClick(todoItem: TodoItem)
     }
+}
+
+class TaskDiffCallback: DiffUtil.ItemCallback<TodoItem>() {
+    override fun areItemsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean = oldItem.idTask == newItem.idTask
+    override fun areContentsTheSame(oldItem: TodoItem, newItem: TodoItem): Boolean = oldItem == newItem
 }

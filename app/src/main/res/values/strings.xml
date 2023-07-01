@@ -1,7 +1,15 @@
 <resources>
     <string name="app_name">PetruninKotlinYandex</string>
     <string name="page_title">Мои дела</string>
-    <string name="counter_completed_tasks">Выполнено - </string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="counter_completed_tasks">Выполнено -</string>
+
+    <string name="example_text">Текст</string>
+    <string name="no_text">No</string>
     <string name="save_task">СОХРАНИТЬ</string>
+    <string name="test_text">Что надо сделать...</string>
+    <string name="importance_label_text">Важность</string>
+    <string name="importance_text">Нет</string>
+    <string name="date_title_text">Сделать до</string>
+    <string name="delete_text">Удалить</string>
+    <string name="edit_text_hint">Необходимо ввести задачу</string>
 </resources>

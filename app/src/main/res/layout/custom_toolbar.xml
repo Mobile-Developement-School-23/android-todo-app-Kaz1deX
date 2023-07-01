@@ -3,6 +3,6 @@
     android:id="@+id/custom_tool_bar"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#FF9800">
+    android:background="@color/color_blue">
 
 </androidx.appcompat.widget.Toolbar>
