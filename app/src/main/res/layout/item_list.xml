@@ -33,7 +33,7 @@
 
             <CheckBox
                 android:id="@+id/checkBox_task"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:background="@color/back_secondary"
@@ -41,7 +41,8 @@
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:paddingStart="5dp"
-                android:text="Text"
+                android:paddingEnd="5dp"
+                android:text="@string/example_text"
                 android:textColor="@color/label_primary"
                 android:textSize="16sp"
                 app:useMaterialThemeColors="false" />
@@ -52,7 +53,8 @@
                 android:layout_height="50dp"
                 android:background="@android:color/transparent"
                 android:scaleType="center"
-                app:srcCompat="@drawable/info_outline" />
+                app:srcCompat="@drawable/info_outline"
+                android:contentDescription="@string/no_text" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 

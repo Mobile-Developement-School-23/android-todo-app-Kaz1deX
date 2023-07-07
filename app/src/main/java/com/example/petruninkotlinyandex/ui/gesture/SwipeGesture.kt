@@ -1,4 +1,4 @@
-package com.example.petruninkotlinyandex.gesture
+package com.example.petruninkotlinyandex.ui.gesture
 
 import android.content.Context
 import android.graphics.Canvas
@@ -15,6 +15,7 @@ abstract class SwipeGesture(context: Context): ItemTouchHelper.SimpleCallback(
 ) {
     // Цвет для фона при свайпе влево
     private val deleteColor = ContextCompat.getColor(context, R.color.color_red)
+
     // Иконка при свайпе влево
     private val deleteIcon = R.drawable.delete_white
 
@@ -47,6 +48,7 @@ abstract class SwipeGesture(context: Context): ItemTouchHelper.SimpleCallback(
         )
             // Установка цвета фона при свайпе влево
             .addSwipeLeftBackgroundColor(deleteColor)
+
             // Установка иконки при свайпе влево
             .addSwipeLeftActionIcon(deleteIcon)
             .create()

@@ -5,51 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/main_theme"
-    tools:context=".activities.MainActivity">
-
-<!--    <com.google.android.material.appbar.AppBarLayout-->
-<!--        android:id="@+id/appbar_main_screen"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="150dp"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        android:theme="@style/main_style">-->
-
-<!--        <com.google.android.material.appbar.CollapsingToolbarLayout-->
-<!--            android:id="@+id/collapsing_toolbar_main_screen"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:fitsSystemWindows="true"-->
-<!--            app:contentScrim="?attr/colorPrimary"-->
-<!--            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"-->
-<!--            app:title="@string/page_title">-->
-
-<!--            <TextView-->
-<!--                android:id="@+id/title_text_collapsing"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_gravity="bottom|left"-->
-<!--                android:layout_marginLeft="33dp"-->
-<!--                android:text="Выполнено - "-->
-<!--                android:textSize="16sp"-->
-<!--                app:layout_collapseMode="parallax" />-->
-
-<!--            <androidx.appcompat.widget.Toolbar-->
-<!--                android:id="@+id/toolbar_main_screen"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="?attr/actionBarSize"-->
-<!--                app:layout_collapseMode="pin" />-->
-
-<!--        </com.google.android.material.appbar.CollapsingToolbarLayout>-->
-
-<!--    </com.google.android.material.appbar.AppBarLayout>-->
-
-<!--    <androidx.core.widget.NestedScrollView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:contentDescription="NoScroll"-->
-<!--        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">-->
-<!--        -->
-<!--    </androidx.core.widget.NestedScrollView>-->
+    tools:context=".ui.activity.MainActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/nav_host_fragment_container"
