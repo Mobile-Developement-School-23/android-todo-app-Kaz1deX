@@ -9,7 +9,6 @@ data class TodoItem(
     var isCompleted: Boolean = false, // Флаг, указывающий завершена ли задача
     var currentDate: String = "",     // Дата создания задачи
     var changingDate: String = "") {} // Дата изменения задачи
-
 enum class Importance{
     LOW,
     NORMAL,
